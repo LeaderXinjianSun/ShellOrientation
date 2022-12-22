@@ -140,6 +140,7 @@
     <Compile Include="Common\Services\IPLCModbusService.cs" />
     <Compile Include="Common\Services\PLCModbusService.cs" />
     <Compile Include="Global.cs" />
+    <Compile Include="Models\ImageCalc.cs" />
     <Compile Include="Models\Param.cs" />
     <Compile Include="ViewModels\Dialog\CameraCalcDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialog\DialogViewModel.cs" />

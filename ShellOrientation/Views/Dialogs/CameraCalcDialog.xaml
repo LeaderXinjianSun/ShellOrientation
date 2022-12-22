@@ -56,27 +56,51 @@
                 </WrapPanel>
             </GroupBox>
             <GroupBox Header="计算">
-                <WrapPanel>
-                    <Button
-                        Command="{Binding CreateLineCommand}"
-                        CommandParameter="0"
-                        Content="线1"
-                        Style="{StaticResource OperateButton}" />
-                    <Button
-                        Command="{Binding CreateLineCommand}"
-                        CommandParameter="1"
-                        Content="线2"
-                        Style="{StaticResource OperateButton}" />
-                    <Button
-                        Command="{Binding CreateLineCommand}"
-                        CommandParameter="2"
-                        Content="线3"
-                        Style="{StaticResource OperateButton}" />
-                    <Button
-                        Command="{Binding CalcCommand}"
-                        Content="计算"
-                        Style="{StaticResource OperateButton}" />
-                </WrapPanel>
+                <StackPanel>
+                    <WrapPanel>
+                        <Button
+                            Command="{Binding CreateLineCommand}"
+                            CommandParameter="0"
+                            Content="线1"
+                            Style="{StaticResource OperateButton}" />
+                        <Button
+                            Command="{Binding CreateLineCommand}"
+                            CommandParameter="1"
+                            Content="线2"
+                            Style="{StaticResource OperateButton}" />
+                        <Button
+                            Command="{Binding CreateLineCommand}"
+                            CommandParameter="2"
+                            Content="线3"
+                            Style="{StaticResource OperateButton}" />
+                    </WrapPanel>
+                    <WrapPanel>
+                        <Button
+                            Command="{Binding CreateLineCommand}"
+                            CommandParameter="3"
+                            Content="线4"
+                            Style="{StaticResource OperateButton}" />
+                        <Button
+                            Command="{Binding CreateLineCommand}"
+                            CommandParameter="4"
+                            Content="线5"
+                            Style="{StaticResource OperateButton}" />
+                        <Button
+                            Command="{Binding CreateLineCommand}"
+                            CommandParameter="5"
+                            Content="线6"
+                            Style="{StaticResource OperateButton}" />
+
+                    </WrapPanel>
+                    <WrapPanel>
+
+                        <Button
+                            Command="{Binding CalcCommand}"
+                            Content="计算"
+                            Style="{StaticResource OperateButton}" />
+                    </WrapPanel>
+                </StackPanel>
+
             </GroupBox>
         </StackPanel>
     </Grid>

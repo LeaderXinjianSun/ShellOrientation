@@ -12,6 +12,7 @@ using ShellOrientation.Common.Services;
 using ShellOrientation.Models;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace ShellOrientation.ViewModels
 {
@@ -62,10 +63,21 @@ namespace ShellOrientation.ViewModels
         public DelegateCommand AppClosedEventCommand =>
             appClosedEventCommand ?? (appClosedEventCommand = new DelegateCommand(ExecuteAppClosedEventCommand));
 
-        void ExecuteAppClosedEventCommand()
+        async void ExecuteAppClosedEventCommand()
         {
+            aggregator.SendMessage("Closed", "App");
+            await Task.Delay(500);
             cam1.CloseCamera();
             cam2.CloseCamera();
+            try
+            {
+                plc.WriteMCoil(800, false);
+                plc.WriteMCoil(801, false);
+                plc.WriteMCoil(802, false);
+                plc.WriteMCoil(803, false);
+            }
+            catch { }
+
             plc.Close();
         }
         void ExecuteMenuCommand(object obj)

@@ -5,6 +5,7 @@ using Prism.Commands;
 using Prism.Ioc;
 using Prism.Services.Dialogs;
 using ShellOrientation.Common.Services;
+using ShellOrientation.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -80,11 +81,99 @@ namespace ShellOrientation.ViewModels.Dialog
             HOperatorSet.ReadRegion(out line1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "line0.hobj"));
             HOperatorSet.ReadRegion(out line2, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "line1.hobj"));
             HOperatorSet.ReadRegion(out line3, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "line2.hobj"));
-            CameraGCStyle0 = new Tuple<string, object>("Color", "yellow");
+            int hv_Result0 = default; HObject ho_ResultRegion0 = default;
+            HOperatorSet.GenEmptyObj(out ho_ResultRegion0);
+            ImageCalc.Calc1(CameraIamge0, line1,ref hv_Result0, ref ho_ResultRegion0);
             CameraAppendHObject0 = null;
-            CameraAppendHObject0 = line1;
-            CameraAppendHObject0 = line2;
-            CameraAppendHObject0 = line3;
+            if (hv_Result0 != 0)
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "green");                
+                CameraAppendHObject0 = ho_ResultRegion0;
+            }
+            else
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                CameraAppendHObject0 = ho_ResultRegion0;
+            }
+
+            int hv_Result1 = default; HObject ho_ResultRegion1 = default;
+            HOperatorSet.GenEmptyObj(out ho_ResultRegion1);
+            ImageCalc.Calc1(CameraIamge0, line2, ref hv_Result1, ref ho_ResultRegion1);
+
+            if (hv_Result1 != 0)
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                CameraAppendHObject0 = ho_ResultRegion1;
+            }
+            else
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                CameraAppendHObject0 = ho_ResultRegion1;
+            }
+
+            int hv_Result2 = default; HObject ho_ResultRegion2 = default;
+            HOperatorSet.GenEmptyObj(out ho_ResultRegion2);
+            ImageCalc.Calc1(CameraIamge0, line3, ref hv_Result2, ref ho_ResultRegion2);
+
+            if (hv_Result2 != 0)
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                CameraAppendHObject0 = ho_ResultRegion2;
+            }
+            else
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                CameraAppendHObject0 = ho_ResultRegion2;
+            }
+
+            HObject line4, line5, line6;
+            HOperatorSet.ReadRegion(out line4, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "line3.hobj"));
+            HOperatorSet.ReadRegion(out line5, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "line4.hobj"));
+            HOperatorSet.ReadRegion(out line6, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "line5.hobj"));
+            int hv_Result3 = default; HObject ho_ResultRegion3 = default;
+            HOperatorSet.GenEmptyObj(out ho_ResultRegion3);
+            ImageCalc.Calc1(CameraIamge0, line4, ref hv_Result3, ref ho_ResultRegion3);
+
+            if (hv_Result3 != 0)
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                CameraAppendHObject0 = ho_ResultRegion3;
+            }
+            else
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                CameraAppendHObject0 = ho_ResultRegion3;
+            }
+
+            int hv_Result4 = default; HObject ho_ResultRegion4 = default;
+            HOperatorSet.GenEmptyObj(out ho_ResultRegion4);
+            ImageCalc.Calc1(CameraIamge0, line5, ref hv_Result4, ref ho_ResultRegion4);
+
+            if (hv_Result4 != 0)
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                CameraAppendHObject0 = ho_ResultRegion4;
+            }
+            else
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                CameraAppendHObject0 = ho_ResultRegion4;
+            }
+
+            int hv_Result5 = default; HObject ho_ResultRegion5 = default;
+            HOperatorSet.GenEmptyObj(out ho_ResultRegion5);
+            ImageCalc.Calc1(CameraIamge0, line6, ref hv_Result5, ref ho_ResultRegion5);
+
+            if (hv_Result5 != 0)
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                CameraAppendHObject0 = ho_ResultRegion5;
+            }
+            else
+            {
+                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                CameraAppendHObject0 = ho_ResultRegion5;
+            }
         }
         void ExecuteCreateLineCommand(object obj)
         {
