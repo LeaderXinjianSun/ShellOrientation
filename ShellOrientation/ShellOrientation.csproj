@@ -51,6 +51,9 @@
     <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.5.1.0\lib\net46\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="NModbus, Version=3.0.72.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NModbus.3.0.72\lib\net46\NModbus.dll</HintPath>
+    </Reference>
     <Reference Include="Prism, Version=8.1.97.5141, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.8.1.97\lib\net461\Prism.dll</HintPath>
     </Reference>
@@ -134,6 +137,8 @@
     <Compile Include="Common\Extensions\MessageExtension.cs" />
     <Compile Include="Common\Services\CameraService.cs" />
     <Compile Include="Common\Services\ICameraService.cs" />
+    <Compile Include="Common\Services\IPLCModbusService.cs" />
+    <Compile Include="Common\Services\PLCModbusService.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Models\Param.cs" />
     <Compile Include="ViewModels\Dialog\CameraCalcDialogViewModel.cs" />

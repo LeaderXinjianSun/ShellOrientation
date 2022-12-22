@@ -23,6 +23,8 @@ namespace ShellOrientation.ViewModels
         private readonly IDialogService dialogService;
         bool isCameraCalcDialog1Show = false;
         ICameraService cam1, cam2;
+        IPLCModbusService plc;
+        Param param;
         #endregion
         #region 属性绑定
         public string Title { get; set; } = "ShellOrientationUI";
@@ -64,6 +66,7 @@ namespace ShellOrientation.ViewModels
         {
             cam1.CloseCamera();
             cam2.CloseCamera();
+            plc.Close();
         }
         void ExecuteMenuCommand(object obj)
         {
@@ -125,6 +128,10 @@ namespace ShellOrientation.ViewModels
             dialogService = _dialogService;
             cam1 = containerProvider.Resolve<ICameraService>("Cam1");
             cam2 = containerProvider.Resolve<ICameraService>("Cam2");
+            plc = containerProvider.Resolve<IPLCModbusService>("plc");
+            LoadParam();
+            var r1 = plc.Connect(param.PLCIP);
+            PLCState = r1;
             NlogConfig();
             aggregator.ResgiterMessage(arg => {
                 switch (arg.Message)
@@ -156,6 +163,12 @@ namespace ShellOrientation.ViewModels
 
             // Apply config           
             NLog.LogManager.Configuration = config;
+        }
+        private void LoadParam()
+        {
+            //Json序列化，从文件读取
+            string jsonString = File.ReadAllText(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Param.json"));
+            param = JsonConvert.DeserializeObject<Param>(jsonString);
         }
         #endregion
     }

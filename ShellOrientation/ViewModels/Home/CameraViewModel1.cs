@@ -21,6 +21,7 @@ namespace ShellOrientation.ViewModels.Home
     {
         #region 变量
         ICameraService cam;
+        IPLCModbusService plc;
         public readonly IEventAggregator aggregator;
         private static Logger logger = LogManager.GetCurrentClassLogger();
         Param param;
@@ -80,6 +81,7 @@ namespace ShellOrientation.ViewModels.Home
             aggregator = _aggregator;
             LoadParam();
             cam = containerProvider.Resolve<ICameraService>("Cam1");
+            plc = containerProvider.Resolve<IPLCModbusService>("plc");
             var r = cam.OpenCamera(param.Camera1Name, "DirectShow");//[0] Integrated Camera //[1] LRCP  USB2.0
             //M800-M803
             if (r)
