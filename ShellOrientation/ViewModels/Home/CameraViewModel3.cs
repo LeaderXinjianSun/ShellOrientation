@@ -128,6 +128,17 @@ namespace ShellOrientation.ViewModels.Home
             HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height.tup"), out OpeningRec1Height);
             HTuple GapMax;
             HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"), out GapMax);
+
+            HTuple thresholdMin_2;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin_2.tup"), out thresholdMin_2);
+            HTuple thresholdMax_2;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax_2.tup"), out thresholdMax_2);
+            HTuple OpeningRec1Width_2;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width_2.tup"), out OpeningRec1Width_2);
+            HTuple OpeningRec1Height_2;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"), out OpeningRec1Height_2);
+            HTuple GapMax_2;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"), out GapMax_2);
             while (true)
             {
                 if (token.IsCancellationRequested)
@@ -162,7 +173,7 @@ namespace ShellOrientation.ViewModels.Home
                     plc.WriteMCoil(800, !(hv_result == 1));
 
                     HObject hv_resultRegion2;
-                    ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_1, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, out hv_resultRegion2, out hv_result);
+                    ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_1, thresholdMin_2, thresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, out hv_resultRegion2, out hv_result);
 
                     System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
                     {

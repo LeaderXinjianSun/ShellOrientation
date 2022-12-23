@@ -98,6 +98,36 @@ namespace ShellOrientation.ViewModels.Dialog
             get { return gapMax; }
             set { SetProperty(ref gapMax, value); }
         }
+        private double thresholdMin_2;
+        public double ThresholdMin_2
+        {
+            get { return thresholdMin_2; }
+            set { SetProperty(ref thresholdMin_2, value); }
+        }
+        private double thresholdMax_2;
+        public double ThresholdMax_2
+        {
+            get { return thresholdMax_2; }
+            set { SetProperty(ref thresholdMax_2, value); }
+        }
+        private double openingRec1Width_2;
+        public double OpeningRec1Width_2
+        {
+            get { return openingRec1Width_2; }
+            set { SetProperty(ref openingRec1Width_2, value); }
+        }
+        private double openingRec1Height_2;
+        public double OpeningRec1Height_2
+        {
+            get { return openingRec1Height_2; }
+            set { SetProperty(ref openingRec1Height_2, value); }
+        }
+        private double gapMax_2;
+        public double GapMax_2
+        {
+            get { return gapMax_2; }
+            set { SetProperty(ref gapMax_2, value); }
+        }
         #endregion
         #region 方法绑定
         private DelegateCommand<object> cameraOperateCommand;
@@ -136,6 +166,21 @@ namespace ShellOrientation.ViewModels.Dialog
                 case "GapMax":
                     HOperatorSet.WriteTuple(new HTuple(GapMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"));
                     break;
+                case "ThresholdMin_2":
+                    HOperatorSet.WriteTuple(new HTuple(ThresholdMin), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin_2.tup"));
+                    break;
+                case "ThresholdMax_2":
+                    HOperatorSet.WriteTuple(new HTuple(ThresholdMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax_2.tup"));
+                    break;
+                case "OpeningRec1Width_2":
+                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Width), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width_2.tup"));
+                    break;
+                case "OpeningRec1Height_2":
+                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Height), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"));
+                    break;
+                case "GapMax_2":
+                    HOperatorSet.WriteTuple(new HTuple(GapMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"));
+                    break;
                 default:
                     break;
             }
@@ -147,7 +192,7 @@ namespace ShellOrientation.ViewModels.Dialog
             HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
             HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
             HTuple hv_result;HObject hv_resultRegion1;
-            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0,thresholdMin,thresholdMax,OpeningRec1Width,OpeningRec1Height,GapMax,out hv_resultRegion1,out hv_result);
+            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0,ThresholdMin,ThresholdMax,OpeningRec1Width,OpeningRec1Height,GapMax,out hv_resultRegion1,out hv_result);
             Console.WriteLine(hv_result.ToString());
             if (hv_result == 1)
             {
@@ -161,7 +206,7 @@ namespace ShellOrientation.ViewModels.Dialog
             CameraAppendHObject0 = hv_resultRegion1;
 
             HObject hv_resultRegion2;
-            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_1, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, out hv_resultRegion2, out hv_result);
+            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_1, ThresholdMin_2, ThresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, out hv_resultRegion2, out hv_result);
             Console.WriteLine(hv_result.ToString());
             if (hv_result == 1)
             {
@@ -262,6 +307,21 @@ namespace ShellOrientation.ViewModels.Dialog
 
                 HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"), out v1);
                 GapMax = v1.D;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin_2.tup"), out v1);
+                ThresholdMin_2 = v1.D;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax_2.tup"), out v1);
+                ThresholdMax_2 = v1.D;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width_2.tup"), out v1);
+                OpeningRec1Width_2 = v1.D;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"), out v1);
+                OpeningRec1Height_2 = v1.D;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"), out v1);
+                GapMax_2 = v1.D;
             }
             catch { }
         }
