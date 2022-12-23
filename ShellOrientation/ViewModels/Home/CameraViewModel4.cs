@@ -18,7 +18,7 @@ using ViewROI;
 
 namespace ShellOrientation.ViewModels.Home
 {
-    public class CameraViewModel1 : BindableBase
+    public class CameraViewModel4 : BindableBase
     {
         #region 变量
         ICameraService cam;
@@ -71,25 +71,25 @@ namespace ShellOrientation.ViewModels.Home
         #endregion
         #endregion
         #region 构造函数
-        public CameraViewModel1(IContainerProvider containerProvider, IEventAggregator _aggregator)
+        public CameraViewModel4(IContainerProvider containerProvider, IEventAggregator _aggregator)
         {
             aggregator = _aggregator;
             LoadParam();
-            cam = containerProvider.Resolve<ICameraService>("Cam1");
+            cam = containerProvider.Resolve<ICameraService>("Cam4");
             plc = containerProvider.Resolve<IPLCModbusService>("plc");
-            var r = cam.OpenCamera(param.Camera1Name, "DirectShow");//[0] Integrated Camera //[1] LRCP  USB2.0
+            var r = cam.OpenCamera(param.Camera4Name, "DirectShow");//[0] Integrated Camera //[1] LRCP  USB2.0
             //M800-M803
             if (r)
             {
                 cam.GrabeImageStart();
-                aggregator.SendMessage("Camera1OpenOK", "Camera");
+                aggregator.SendMessage("Camera4OpenOK", "Camera");
                 source = new CancellationTokenSource();
                 CancellationToken token1 = source.Token;
                 Task.Run(() => Run(token1), token1);
             }
             else
             {
-                aggregator.SendMessage("Camera1OpenNG", "Camera");
+                aggregator.SendMessage("Camera4OpenNG", "Camera");
             }
             aggregator.ResgiterMessage(arg => {
                 switch (arg.Message)

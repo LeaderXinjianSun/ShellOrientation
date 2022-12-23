@@ -6,9 +6,9 @@ namespace ShellOrientation.Views.Home
     /// <summary>
     /// CameraView.xaml 的交互逻辑
     /// </summary>
-    public partial class CameraView1 : UserControl
+    public partial class CameraView3 : UserControl
     {
-        public CameraView1()
+        public CameraView3()
         {
             InitializeComponent();
         }

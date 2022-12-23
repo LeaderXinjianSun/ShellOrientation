@@ -68,17 +68,16 @@ namespace ShellOrientation.ViewModels.Home
         }
         #endregion
         #endregion
-        private string messageStr;
-        public string MessageStr
-        {
-            get { return messageStr; }
-            set { SetProperty(ref messageStr, value); }
-        }
+        //private string messageStr;
+        //public string MessageStr
+        //{
+        //    get { return messageStr; }
+        //    set { SetProperty(ref messageStr, value); }
+        //}
         #endregion
         #region 构造函数
         public CameraViewModel2(IContainerProvider containerProvider, IEventAggregator _aggregator)
-        {
-            MessageStr = string.Empty;
+        {  
             aggregator = _aggregator;
             LoadParam();
             cam = containerProvider.Resolve<ICameraService>("Cam2");
@@ -119,21 +118,21 @@ namespace ShellOrientation.ViewModels.Home
             string jsonString = File.ReadAllText(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Param.json"));
             param = JsonConvert.DeserializeObject<Param>(jsonString);
         }
-        private void addMessage(string str)
-        {
-            logger.Debug(str);
-            Console.WriteLine(str);
-            string[] s = MessageStr.Split('\n');
-            if (s.Length > 1000)
-            {
-                MessageStr = "";
-            }
-            if (MessageStr != "")
-            {
-                MessageStr += "\n";
-            }
-            MessageStr += DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + " " + str;
-        }
+        //private void addMessage(string str)
+        //{
+        //    logger.Debug(str);
+        //    Console.WriteLine(str);
+        //    string[] s = MessageStr.Split('\n');
+        //    if (s.Length > 1000)
+        //    {
+        //        MessageStr = "";
+        //    }
+        //    if (MessageStr != "")
+        //    {
+        //        MessageStr += "\n";
+        //    }
+        //    MessageStr += DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss") + " " + str;
+        //}
         private void Run(CancellationToken token)
         {
             string filepath = $"Camera\\2";
@@ -150,38 +149,38 @@ namespace ShellOrientation.ViewModels.Home
                 {
 
                     CameraIamge0 = cam.GrabeImageAsync();
-                    HTuple hv_result; HObject hv_resultRegion1;
-                    ImageCalc.Calc1(CameraIamge0, rec2_0, out hv_resultRegion1, 50, 150, 300, 10, 20, out hv_result);
-                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
-                    {
-                        if (hv_result.I == 1)
-                        {
-                            CameraGCStyle0 = new Tuple<string, object>("Color", "green");
-                        }
-                        else
-                        {
-                            CameraGCStyle0 = new Tuple<string, object>("Color", "red");
-                        }
-                        CameraAppendHObject0 = null;
-                        CameraAppendHObject0 = hv_resultRegion1;
-                    }));
-                    plc.WriteMCoil(802, !(hv_result.I == 1));
+                    //HTuple hv_result; HObject hv_resultRegion1;
+                    //ImageCalc.Calc1(CameraIamge0, rec2_0, out hv_resultRegion1, 50, 150, 300, 10, 20, out hv_result);
+                    //System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+                    //{
+                    //    if (hv_result.I == 1)
+                    //    {
+                    //        CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                    //    }
+                    //    else
+                    //    {
+                    //        CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                    //    }
+                    //    CameraAppendHObject0 = null;
+                    //    CameraAppendHObject0 = hv_resultRegion1;
+                    //}));
+                    //plc.WriteMCoil(802, !(hv_result.I == 1));
 
-                    HTuple hv_result2; HObject hv_resultRegion2;
-                    ImageCalc.Calc1(CameraIamge0, rec2_1, out hv_resultRegion2, 50, 150, 300, 10, 20, out hv_result2);
-                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
-                    {
-                        if (hv_result2.I == 1)
-                        {
-                            CameraGCStyle0 = new Tuple<string, object>("Color", "green");
-                        }
-                        else
-                        {
-                            CameraGCStyle0 = new Tuple<string, object>("Color", "red");
-                        }
-                        CameraAppendHObject0 = hv_resultRegion2;
-                    }));
-                    plc.WriteMCoil(803, !(hv_result2.I == 1));
+                    //HTuple hv_result2; HObject hv_resultRegion2;
+                    //ImageCalc.Calc1(CameraIamge0, rec2_1, out hv_resultRegion2, 50, 150, 300, 10, 20, out hv_result2);
+                    //System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+                    //{
+                    //    if (hv_result2.I == 1)
+                    //    {
+                    //        CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                    //    }
+                    //    else
+                    //    {
+                    //        CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                    //    }
+                    //    CameraAppendHObject0 = hv_resultRegion2;
+                    //}));
+                    //plc.WriteMCoil(803, !(hv_result2.I == 1));
 
 
                 }

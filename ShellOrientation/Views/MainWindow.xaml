@@ -42,28 +42,49 @@
                     Command="{Binding MenuCommand}"
                     CommandParameter="camera2"
                     Header="相机2" />
+                <MenuItem
+                    Command="{Binding MenuCommand}"
+                    CommandParameter="camera3"
+                    Header="相机3" />
+                <MenuItem
+                    Command="{Binding MenuCommand}"
+                    CommandParameter="camera4"
+                    Header="相机4" />
             </MenuItem>
         </Menu>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="0.5*" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
             <GroupBox Header="相机1">
                 <ContentControl prism:RegionManager.RegionName="CameraRegion1" />
             </GroupBox>
             <GroupBox Grid.Column="1" Header="相机2">
                 <ContentControl prism:RegionManager.RegionName="CameraRegion2" />
             </GroupBox>
+            <GroupBox Grid.Row="1" Header="相机3">
+                <ContentControl prism:RegionManager.RegionName="CameraRegion3" />
+            </GroupBox>
+            <GroupBox
+                Grid.Row="1"
+                Grid.Column="1"
+                Header="相机4">
+                <ContentControl prism:RegionManager.RegionName="CameraRegion4" />
+            </GroupBox>
             <GroupBox Grid.Column="2" Header="操作">
-                <StackPanel>
+                <WrapPanel>
                     <Button Content="重连 " Style="{StaticResource OperateButton}" />
                     <Button
                         Command="{Binding TestCommand}"
                         Content="测试 "
                         Style="{StaticResource OperateButton}" />
-                </StackPanel>
+                </WrapPanel>
             </GroupBox>
         </Grid>
         <StatusBar Grid.Row="2">
@@ -72,6 +93,12 @@
             </StatusBarItem>
             <StatusBarItem>
                 <controls:StatusCell State="{Binding Camera2State}" StateName="相机2" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <controls:StatusCell State="{Binding Camera3State}" StateName="相机3" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <controls:StatusCell State="{Binding Camera4State}" StateName="相机4" />
             </StatusBarItem>
             <StatusBarItem>
                 <controls:StatusCell State="{Binding PLCState}" StateName="PLC" />

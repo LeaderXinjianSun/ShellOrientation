@@ -23,7 +23,7 @@ namespace ShellOrientation.ViewModels
         public readonly IEventAggregator aggregator;
         private readonly IDialogService dialogService;
         bool isCameraCalcDialog1Show = false;
-        ICameraService cam1, cam2;
+        ICameraService cam1, cam2,cam3,cam4;
         IPLCModbusService plc;
         Param param;
         #endregion
@@ -41,6 +41,18 @@ namespace ShellOrientation.ViewModels
         {
             get { return camera2State; }
             set { SetProperty(ref camera2State, value); }
+        }
+        private bool camera3State;
+        public bool Camera3State
+        {
+            get { return camera3State; }
+            set { SetProperty(ref camera3State, value); }
+        }
+        private bool camera4State;
+        public bool Camera4State
+        {
+            get { return camera4State; }
+            set { SetProperty(ref camera4State, value); }
         }
         private bool pLCState;
         public bool PLCState
@@ -69,6 +81,8 @@ namespace ShellOrientation.ViewModels
             await Task.Delay(500);
             cam1.CloseCamera();
             cam2.CloseCamera();
+            cam3.CloseCamera();
+            cam4.CloseCamera();
             try
             {
                 plc.WriteMCoil(800, false);
@@ -108,6 +122,30 @@ namespace ShellOrientation.ViewModels
                         });
                     }
                     break;
+                case "camera3":
+                    if (!isCameraCalcDialog1Show)
+                    {
+                        isCameraCalcDialog1Show = true;
+                        DialogParameters param = new DialogParameters();
+                        param.Add("CameraIndex", 2);
+                        dialogService.Show("CameraCalcDialog", param, arg =>
+                        {
+                            isCameraCalcDialog1Show = false;
+                        });
+                    }
+                    break;
+                case "camera4":
+                    if (!isCameraCalcDialog1Show)
+                    {
+                        isCameraCalcDialog1Show = true;
+                        DialogParameters param = new DialogParameters();
+                        param.Add("CameraIndex", 3);
+                        dialogService.Show("CameraCalcDialog", param, arg =>
+                        {
+                            isCameraCalcDialog1Show = false;
+                        });
+                    }
+                    break;
                 default:
                     break;
             }
@@ -127,6 +165,8 @@ namespace ShellOrientation.ViewModels
         {
             regionManager.Regions["CameraRegion1"].RequestNavigate("View1");
             regionManager.Regions["CameraRegion2"].RequestNavigate("View2");
+            regionManager.Regions["CameraRegion3"].RequestNavigate("View3");
+            regionManager.Regions["CameraRegion4"].RequestNavigate("View4");
         }
         #endregion
         #region 构造函数
@@ -134,12 +174,16 @@ namespace ShellOrientation.ViewModels
         {
             Camera1State = false;
             Camera2State = false;
+            Camera3State = false;
+            Camera4State = false;
             PLCState = false;
             regionManager = _regionManager;
             aggregator = _aggregator;
             dialogService = _dialogService;
             cam1 = containerProvider.Resolve<ICameraService>("Cam1");
             cam2 = containerProvider.Resolve<ICameraService>("Cam2");
+            cam3 = containerProvider.Resolve<ICameraService>("Cam3");
+            cam4 = containerProvider.Resolve<ICameraService>("Cam4");
             plc = containerProvider.Resolve<IPLCModbusService>("plc");
             LoadParam();
             var r1 = plc.Connect(param.PLCIP);
@@ -159,6 +203,18 @@ namespace ShellOrientation.ViewModels
                         break;
                     case "Camera2OpenNG":
                         Camera2State = false;
+                        break;
+                    case "Camera3OpenOK":
+                        Camera3State = true;
+                        break;
+                    case "Camera3OpenNG":
+                        Camera3State = false;
+                        break;
+                    case "Camera4OpenOK":
+                        Camera4State = true;
+                        break;
+                    case "Camera4OpenNG":
+                        Camera4State = false;
                         break;
                     default:
                         break;

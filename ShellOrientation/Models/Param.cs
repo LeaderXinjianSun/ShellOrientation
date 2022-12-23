@@ -6,6 +6,8 @@ namespace ShellOrientation.Models
     {
         public string Camera1Name;
         public string Camera2Name;
+        public string Camera3Name;
+        public string Camera4Name;
         public string PLCIP;
     }
 }

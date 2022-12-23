@@ -12,10 +12,5 @@ namespace ShellOrientation.Views.Home
         {
             InitializeComponent();
         }
-
-        private void MsgTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            MsgTextBox.ScrollToEnd();
-        }
     }
 }

@@ -116,6 +116,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Home\CameraView4.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Home\CameraView3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Home\CameraView1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -144,6 +152,8 @@
     <Compile Include="Models\Param.cs" />
     <Compile Include="ViewModels\Dialog\CameraCalcDialogViewModel.cs" />
     <Compile Include="ViewModels\Dialog\DialogViewModel.cs" />
+    <Compile Include="ViewModels\Home\CameraViewModel4.cs" />
+    <Compile Include="ViewModels\Home\CameraViewModel3.cs" />
     <Compile Include="ViewModels\Home\CameraViewModel1.cs" />
     <Compile Include="ViewModels\Home\CameraViewModel2.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -152,6 +162,12 @@
     </Compile>
     <Compile Include="Views\Dialogs\CameraCalcDialog.xaml.cs">
       <DependentUpon>CameraCalcDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Home\CameraView4.xaml.cs">
+      <DependentUpon>CameraView4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Home\CameraView3.xaml.cs">
+      <DependentUpon>CameraView3.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Home\CameraView1.xaml.cs">
       <DependentUpon>CameraView1.xaml</DependentUpon>
