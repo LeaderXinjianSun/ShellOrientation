@@ -167,19 +167,19 @@ namespace ShellOrientation.ViewModels.Dialog
                     HOperatorSet.WriteTuple(new HTuple(GapMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"));
                     break;
                 case "ThresholdMin_2":
-                    HOperatorSet.WriteTuple(new HTuple(ThresholdMin), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin_2.tup"));
+                    HOperatorSet.WriteTuple(new HTuple(ThresholdMin_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin_2.tup"));
                     break;
                 case "ThresholdMax_2":
-                    HOperatorSet.WriteTuple(new HTuple(ThresholdMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax_2.tup"));
+                    HOperatorSet.WriteTuple(new HTuple(ThresholdMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax_2.tup"));
                     break;
                 case "OpeningRec1Width_2":
-                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Width), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width_2.tup"));
+                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Width_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width_2.tup"));
                     break;
                 case "OpeningRec1Height_2":
-                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Height), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"));
+                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Height_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"));
                     break;
                 case "GapMax_2":
-                    HOperatorSet.WriteTuple(new HTuple(GapMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"));
+                    HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"));
                     break;
                 default:
                     break;

@@ -118,7 +118,8 @@ namespace ShellOrientation.Models
             ho_ImageReduced.Dispose();
             HOperatorSet.ReduceDomain(ho_image, ho_Rectangle, out ho_ImageReduced);
             ho_GrayImage.Dispose();
-            HOperatorSet.Rgb1ToGray(ho_ImageReduced, out ho_GrayImage);
+            //HOperatorSet.Rgb1ToGray(ho_ImageReduced, out ho_GrayImage);
+            HOperatorSet.Decompose3(ho_ImageReduced, out ho_GrayImage, out _, out _);
             ho_Region.Dispose();
             HOperatorSet.Threshold(ho_GrayImage, out ho_Region, ThresholdMin, ThresholdMax);
             ho_RegionFillUp.Dispose();
