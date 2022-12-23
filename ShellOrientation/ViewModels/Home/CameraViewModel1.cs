@@ -166,12 +166,13 @@ namespace ShellOrientation.ViewModels.Home
                     //    CameraAppendHObject0 = hv_resultRegion2;
                     //}));
                     //plc.WriteMCoil(801, !(hv_result2.I == 1));
+                    
                 }
                 catch (Exception ex)
                 {
 
                 }
-
+                Thread.Sleep(100);
             }
         }
         #endregion

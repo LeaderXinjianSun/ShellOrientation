@@ -171,7 +171,7 @@ namespace ShellOrientation.ViewModels.Home
                 {
 
                 }
-
+                Thread.Sleep(100);
             }
         }
         #endregion

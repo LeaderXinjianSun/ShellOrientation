@@ -161,6 +161,14 @@ namespace ShellOrientation.ViewModels.Dialog
                     Title = "相机2";
                     cam = container.Resolve<ICameraService>("Cam2");
                     break;
+                case 3:
+                    Title = "相机3";
+                    cam = container.Resolve<ICameraService>("Cam3");
+                    break;
+                case 4:
+                    Title = "相机4";
+                    cam = container.Resolve<ICameraService>("Cam4");
+                    break;
                 default:
                     break;
             }

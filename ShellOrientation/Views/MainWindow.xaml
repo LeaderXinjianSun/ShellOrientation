@@ -8,8 +8,8 @@
     xmlns:local="clr-namespace:ShellOrientation"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    Width="1080"
-    Height="600"
+    Width="1280"
+    Height="1024"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Title>
@@ -62,19 +62,19 @@
                 <RowDefinition />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <GroupBox Header="相机1">
+            <GroupBox Header="①号机-左">
                 <ContentControl prism:RegionManager.RegionName="CameraRegion1" />
             </GroupBox>
-            <GroupBox Grid.Column="1" Header="相机2">
+            <GroupBox Grid.Column="1" Header="①号机-右">
                 <ContentControl prism:RegionManager.RegionName="CameraRegion2" />
             </GroupBox>
-            <GroupBox Grid.Row="1" Header="相机3">
+            <GroupBox Grid.Row="1" Header="②号机-左">
                 <ContentControl prism:RegionManager.RegionName="CameraRegion3" />
             </GroupBox>
             <GroupBox
                 Grid.Row="1"
                 Grid.Column="1"
-                Header="相机4">
+                Header="②号机-右">
                 <ContentControl prism:RegionManager.RegionName="CameraRegion4" />
             </GroupBox>
             <GroupBox Grid.Column="2" Header="操作">
