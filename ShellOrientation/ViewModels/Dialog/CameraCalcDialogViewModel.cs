@@ -62,6 +62,42 @@ namespace ShellOrientation.ViewModels.Dialog
         }
         #endregion
         #endregion
+        private double rotateDeg;
+        public double RotateDeg
+        {
+            get { return rotateDeg; }
+            set { SetProperty(ref rotateDeg, value); }
+        }
+        private double thresholdMin;
+        public double ThresholdMin
+        {
+            get { return thresholdMin; }
+            set { SetProperty(ref thresholdMin, value); }
+        }
+        private double thresholdMax;
+        public double ThresholdMax
+        {
+            get { return thresholdMax; }
+            set { SetProperty(ref thresholdMax, value); }
+        }
+        private double openingRec1Width;
+        public double OpeningRec1Width
+        {
+            get { return openingRec1Width; }
+            set { SetProperty(ref openingRec1Width, value); }
+        }
+        private double openingRec1Height;
+        public double OpeningRec1Height
+        {
+            get { return openingRec1Height; }
+            set { SetProperty(ref openingRec1Height, value); }
+        }
+        private double gapMax;
+        public double GapMax
+        {
+            get { return gapMax; }
+            set { SetProperty(ref gapMax, value); }
+        }
         #endregion
         #region 方法绑定
         private DelegateCommand<object> cameraOperateCommand;
@@ -73,15 +109,45 @@ namespace ShellOrientation.ViewModels.Dialog
         private DelegateCommand calcCommand;
         public DelegateCommand CalcCommand =>
             calcCommand ?? (calcCommand = new DelegateCommand(ExecuteCalcCommand));
+        private DelegateCommand<object> textBoxLostFocusEventCommand;
+        public DelegateCommand<object> TextBoxLostFocusEventCommand =>
+            textBoxLostFocusEventCommand ?? (textBoxLostFocusEventCommand = new DelegateCommand<object>(ExecuteTextBoxLostFocusEventCommand));
 
+        void ExecuteTextBoxLostFocusEventCommand(object obj)
+        {
+            string filepath = $"Camera\\{index + 1}";
+            switch (obj.ToString())
+            {
+                case "RotateDeg":
+                    HOperatorSet.WriteTuple(new HTuple(RotateDeg),System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "RotateDeg.tup"));
+                    break;
+                case "ThresholdMin":
+                    HOperatorSet.WriteTuple(new HTuple(ThresholdMin), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin.tup"));
+                    break;
+                case "ThresholdMax":
+                    HOperatorSet.WriteTuple(new HTuple(ThresholdMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax.tup"));
+                    break;
+                case "OpeningRec1Width":
+                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Width), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width.tup"));
+                    break;
+                case "OpeningRec1Height":
+                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Height), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height.tup"));
+                    break;
+                case "GapMax":
+                    HOperatorSet.WriteTuple(new HTuple(GapMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"));
+                    break;
+                default:
+                    break;
+            }
+        }
         void ExecuteCalcCommand()
         {
             string filepath = $"Camera\\{index + 1}";
-            HObject rec2_0, rec2_1;
-            HOperatorSet.ReadRegion(out rec2_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec2_0.hobj"));
-            HOperatorSet.ReadRegion(out rec2_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec2_1.hobj"));
+            HObject rec1_0, rec1_1;
+            HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
+            HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
             HTuple hv_result;HObject hv_resultRegion1;
-            ImageCalc.Calc1(CameraIamge0, rec2_0, out hv_resultRegion1,50, 150,300,10,20,out hv_result);
+            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0,thresholdMin,thresholdMin,OpeningRec1Width,OpeningRec1Height,GapMax,out hv_resultRegion1,out hv_result);
             Console.WriteLine(hv_result.ToString());
             if (hv_result == 1)
             {
@@ -95,7 +161,7 @@ namespace ShellOrientation.ViewModels.Dialog
             CameraAppendHObject0 = hv_resultRegion1;
 
             HObject hv_resultRegion2;
-            ImageCalc.Calc1(CameraIamge0, rec2_1, out hv_resultRegion1, 50, 150, 300, 10, 20, out hv_result);
+            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0, thresholdMin, thresholdMin, OpeningRec1Width, OpeningRec1Height, GapMax, out hv_resultRegion2, out hv_result);
             Console.WriteLine(hv_result.ToString());
             if (hv_result == 1)
             {
@@ -105,14 +171,14 @@ namespace ShellOrientation.ViewModels.Dialog
             {
                 CameraGCStyle0 = new Tuple<string, object>("Color", "red");
             }
-            CameraAppendHObject0 = hv_resultRegion1;
+            CameraAppendHObject0 = hv_resultRegion2;
 
 
         }
         void ExecuteCreateLineCommand(object obj)
         {
             string filepath = $"Camera\\{index + 1}";
-            ROI roi = Global.CameraImageViewer.DrawROI(ROI.ROI_TYPE_RECTANGLE2);
+            ROI roi = Global.CameraImageViewer.DrawROI(ROI.ROI_TYPE_RECTANGLE1);
             var line = roi.getRegion();
             CameraAppendHObject0 = null;
             CameraAppendHObject0 = line;
@@ -121,14 +187,17 @@ namespace ShellOrientation.ViewModels.Dialog
             {
                 Directory.CreateDirectory(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
             }
-            HOperatorSet.WriteRegion(line, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"rec2_{obj}.hobj"));
+            HOperatorSet.WriteRegion(line, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, $"rec1_{obj}.hobj"));
         }
         void ExecuteCameraOperateCommand(object obj)
         {
             switch (obj.ToString())
             {
                 case "拍照":
-                    CameraIamge0 = cam.GrabeImageAsync();
+                    //CameraIamge0 = cam.GrabeImageAsync();
+                    HObject ho_ImageRotate;
+                    HOperatorSet.RotateImage(cam.GrabeImageAsync(), out ho_ImageRotate, RotateDeg, "constant");
+                    CameraIamge0 = new HImage(ho_ImageRotate);
                     break;
                 case "打开":
                     {
@@ -161,18 +230,40 @@ namespace ShellOrientation.ViewModels.Dialog
                     Title = "相机2";
                     cam = container.Resolve<ICameraService>("Cam2");
                     break;
-                case 3:
+                case 2:
                     Title = "相机3";
                     cam = container.Resolve<ICameraService>("Cam3");
                     break;
-                case 4:
+                case 3:
                     Title = "相机4";
                     cam = container.Resolve<ICameraService>("Cam4");
                     break;
                 default:
                     break;
             }
-           
+            string filepath = $"Camera\\{index + 1}";
+            try
+            {
+                HTuple v1;
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "RotateDeg.tup"),out v1);
+                RotateDeg = v1.D;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin.tup"), out v1);
+                ThresholdMin = v1.D;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax.tup"), out v1);
+                ThresholdMax = v1.D;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width.tup"), out v1);
+                OpeningRec1Width = v1.D;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height.tup"), out v1);
+                OpeningRec1Height = v1.D;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"), out v1);
+                GapMax = v1.D;
+            }
+            catch { }
         }
         #endregion
         public CameraCalcDialogViewModel(IContainerProvider containerProvider) : base(containerProvider)

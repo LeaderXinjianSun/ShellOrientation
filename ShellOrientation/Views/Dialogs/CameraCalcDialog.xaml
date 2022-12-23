@@ -4,18 +4,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:halconviewer="clr-namespace:HalconViewer;assembly=HalconViewer"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:ShellOrientation.Views.Dialogs"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    d:DesignHeight="450"
-    d:DesignWidth="600"
+    d:DesignHeight="600"
+    d:DesignWidth="800"
     mc:Ignorable="d">
     <prism:Dialog.WindowStyle>
         <Style TargetType="Window">
             <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
             <Setter Property="ResizeMode" Value="NoResize" />
-            <Setter Property="Width" Value="600" />
-            <Setter Property="Height" Value="450" />
+            <Setter Property="Width" Value="800" />
+            <Setter Property="Height" Value="600" />
         </Style>
     </prism:Dialog.WindowStyle>
     <Grid>
@@ -103,6 +104,91 @@
 
             </GroupBox>
         </StackPanel>
+        <GroupBox Grid.Row="1" Header="参数">
+            <Grid>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Width" Value="80" />
+                        <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Width" Value="60" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                    </Style>
+                    <Style x:Key="stackPanelCell" TargetType="StackPanel">
+                        <Setter Property="Margin" Value="1" />
+                        <Setter Property="Orientation" Value="Horizontal" />
+                    </Style>
+                </Grid.Resources>
+                <StackPanel>
+                    <StackPanel Style="{StaticResource stackPanelCell}">
+                        <TextBlock Text="图像矫正角度" />
+                        <TextBox Text="{Binding RotateDeg}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="RotateDeg" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                        <TextBlock Text="°" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource stackPanelCell}">
+                        <TextBlock Text="塑壳阈值min" />
+                        <TextBox Text="{Binding ThresholdMin}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="ThresholdMin" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource stackPanelCell}">
+                        <TextBlock Text="塑壳阈值max" />
+                        <TextBox Text="{Binding ThresholdMax}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="ThresholdMax" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource stackPanelCell}">
+                        <TextBlock Text="剃边矩形宽" />
+                        <TextBox Text="{Binding OpeningRec1Width}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="OpeningRec1Width" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                        <TextBlock Text="像素" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource stackPanelCell}">
+                        <TextBlock Text="剃边矩形高" />
+                        <TextBox Text="{Binding OpeningRec1Height}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="OpeningRec1Height" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                        <TextBlock Text="像素" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource stackPanelCell}">
+                        <TextBlock Text="判定间隙" />
+                        <TextBox Text="{Binding GapMax}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="GapMax" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+                        <TextBlock Text="像素" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
     </Grid>
 
 </UserControl>

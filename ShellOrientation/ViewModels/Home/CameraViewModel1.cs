@@ -116,10 +116,9 @@ namespace ShellOrientation.ViewModels.Home
         private void Run(CancellationToken token)
         {
             string filepath = $"Camera\\1";
-            //HObject rec2_0, rec2_1;
-            //HOperatorSet.ReadRegion(out rec2_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec2_0.hobj"));
-            //HOperatorSet.ReadRegion(out rec2_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec2_1.hobj"));
-
+            
+            HTuple RotateDeg;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "RotateDeg.tup"), out RotateDeg);
             while (true)
             {
                 if (token.IsCancellationRequested)
@@ -128,45 +127,11 @@ namespace ShellOrientation.ViewModels.Home
                 }
                 try
                 {
-
-                    CameraIamge0 = cam.GrabeImageAsync();
-                    //HObject rec2_0, rec2_1;
-                    //HOperatorSet.ReadRegion(out rec2_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec2_0.hobj"));
-                    //HOperatorSet.ReadRegion(out rec2_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec2_1.hobj"));
-
-                    //HTuple hv_result; HObject hv_resultRegion1;
-                    //ImageCalc.Calc1(CameraIamge0, rec2_0, out hv_resultRegion1, 50, 150, 300, 10, 20, out hv_result);
-                    //System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
-                    //{
-                    //    if (hv_result.I == 1)
-                    //    {
-                    //        CameraGCStyle0 = new Tuple<string, object>("Color", "green");
-                    //    }
-                    //    else
-                    //    {
-                    //        CameraGCStyle0 = new Tuple<string, object>("Color", "red");
-                    //    }
-                    //    CameraAppendHObject0 = null;
-                    //    CameraAppendHObject0 = hv_resultRegion1;
-                    //}));
-                    //plc.WriteMCoil(800, !(hv_result.I == 1));
-
-                    //HTuple hv_result2; HObject hv_resultRegion2;
-                    //ImageCalc.Calc1(CameraIamge0, rec2_1, out hv_resultRegion2, 50, 150, 300, 10, 20, out hv_result2);
-                    //System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
-                    //{
-                    //    if (hv_result2.I == 1)
-                    //    {
-                    //        CameraGCStyle0 = new Tuple<string, object>("Color", "green");
-                    //    }
-                    //    else
-                    //    {
-                    //        CameraGCStyle0 = new Tuple<string, object>("Color", "red");
-                    //    }
-                    //    CameraAppendHObject0 = hv_resultRegion2;
-                    //}));
-                    //plc.WriteMCoil(801, !(hv_result2.I == 1));
+                    HObject ho_ImageRotate;
+                    HOperatorSet.RotateImage(cam.GrabeImageAsync(), out ho_ImageRotate, RotateDeg, "constant");
+                    CameraIamge0 = new HImage(ho_ImageRotate);
                     
+
                 }
                 catch (Exception ex)
                 {

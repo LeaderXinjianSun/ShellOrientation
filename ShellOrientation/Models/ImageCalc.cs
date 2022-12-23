@@ -97,5 +97,55 @@ namespace ShellOrientation.Models
 
             return;
         }
+        public static void CalcOpeningRec1(HObject ho_image, HObject ho_Rectangle, HTuple ThresholdMin, HTuple ThresholdMax, HTuple OpeningRec1Width, HTuple OpeningRec1Height, HTuple GapMax,
+            out HObject ho_ConnectedRegions,out HTuple hv_isOK)
+        {
+            // Local iconic variables 
+            HObject ho_ImageReduced, ho_GrayImage, ho_Region, ho_RegionFillUp;
+            HObject ho_RegionOpening, ho_RegionDifference;
+
+            // Local control variables 
+
+            HTuple hv_widths = null, hv_maxWidth = null;
+            // Initialize local and output iconic variables 
+            HOperatorSet.GenEmptyObj(out ho_ImageReduced);
+            HOperatorSet.GenEmptyObj(out ho_GrayImage);
+            HOperatorSet.GenEmptyObj(out ho_Region);
+            HOperatorSet.GenEmptyObj(out ho_RegionFillUp);
+            HOperatorSet.GenEmptyObj(out ho_RegionOpening);
+            HOperatorSet.GenEmptyObj(out ho_RegionDifference);
+            HOperatorSet.GenEmptyObj(out ho_ConnectedRegions);
+            ho_ImageReduced.Dispose();
+            HOperatorSet.ReduceDomain(ho_image, ho_Rectangle, out ho_ImageReduced);
+            ho_GrayImage.Dispose();
+            HOperatorSet.Rgb1ToGray(ho_ImageReduced, out ho_GrayImage);
+            ho_Region.Dispose();
+            HOperatorSet.Threshold(ho_GrayImage, out ho_Region, ThresholdMin, ThresholdMax);
+            ho_RegionFillUp.Dispose();
+            HOperatorSet.FillUp(ho_Region, out ho_RegionFillUp);
+
+            ho_RegionOpening.Dispose();
+            HOperatorSet.OpeningRectangle1(ho_RegionFillUp, out ho_RegionOpening, OpeningRec1Width, OpeningRec1Height);
+
+            ho_RegionDifference.Dispose();
+            HOperatorSet.Difference(ho_RegionFillUp, ho_RegionOpening, out ho_RegionDifference
+                );
+            ho_ConnectedRegions.Dispose();
+            HOperatorSet.Connection(ho_RegionDifference, out ho_ConnectedRegions);
+            HOperatorSet.RegionFeatures(ho_ConnectedRegions, "width", out hv_widths);
+
+            hv_maxWidth = hv_widths.TupleMax();
+            hv_isOK = 1;
+            if (new HTuple(hv_maxWidth.TupleGreater(GapMax)) != 0)
+            {
+                hv_isOK = 0;
+            }
+            ho_ImageReduced.Dispose();
+            ho_GrayImage.Dispose();
+            ho_Region.Dispose();
+            ho_RegionFillUp.Dispose();
+            ho_RegionOpening.Dispose();
+            ho_RegionDifference.Dispose();
+        }
     }
 }
