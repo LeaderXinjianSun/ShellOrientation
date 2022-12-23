@@ -8,6 +8,7 @@ namespace ShellOrientation.Models
         public string Camera2Name;
         public string Camera3Name;
         public string Camera4Name;
-        public string PLCIP;
+        public string PLCIP1;
+        public string PLCIP2;
     }
 }

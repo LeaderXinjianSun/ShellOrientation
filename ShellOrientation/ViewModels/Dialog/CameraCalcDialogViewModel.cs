@@ -147,7 +147,7 @@ namespace ShellOrientation.ViewModels.Dialog
             HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
             HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
             HTuple hv_result;HObject hv_resultRegion1;
-            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0,thresholdMin,thresholdMin,OpeningRec1Width,OpeningRec1Height,GapMax,out hv_resultRegion1,out hv_result);
+            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0,thresholdMin,thresholdMax,OpeningRec1Width,OpeningRec1Height,GapMax,out hv_resultRegion1,out hv_result);
             Console.WriteLine(hv_result.ToString());
             if (hv_result == 1)
             {
@@ -161,7 +161,7 @@ namespace ShellOrientation.ViewModels.Dialog
             CameraAppendHObject0 = hv_resultRegion1;
 
             HObject hv_resultRegion2;
-            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0, thresholdMin, thresholdMin, OpeningRec1Width, OpeningRec1Height, GapMax, out hv_resultRegion2, out hv_result);
+            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_1, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, out hv_resultRegion2, out hv_result);
             Console.WriteLine(hv_result.ToString());
             if (hv_result == 1)
             {

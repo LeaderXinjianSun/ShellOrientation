@@ -29,7 +29,8 @@ namespace ShellOrientation
             containerRegistry.RegisterSingleton<ICameraService, CameraService>("Cam2");
             containerRegistry.RegisterSingleton<ICameraService, CameraService>("Cam3");
             containerRegistry.RegisterSingleton<ICameraService, CameraService>("Cam4");
-            containerRegistry.RegisterSingleton<IPLCModbusService, PLCModbusService>("plc");
+            containerRegistry.RegisterSingleton<IPLCModbusService, PLCModbusService>("plc1");
+            containerRegistry.RegisterSingleton<IPLCModbusService, PLCModbusService>("plc2");
             containerRegistry.RegisterDialog<CameraCalcDialog, CameraCalcDialogViewModel>();
         }
     }

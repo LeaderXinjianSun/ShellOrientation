@@ -101,7 +101,10 @@
                 <controls:StatusCell State="{Binding Camera4State}" StateName="相机4" />
             </StatusBarItem>
             <StatusBarItem>
-                <controls:StatusCell State="{Binding PLCState}" StateName="PLC" />
+                <controls:StatusCell State="{Binding PLC1State}" StateName="PLC1" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <controls:StatusCell State="{Binding PLC2State}" StateName="PLC2" />
             </StatusBarItem>
         </StatusBar>
     </Grid>

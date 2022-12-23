@@ -24,7 +24,7 @@ namespace ShellOrientation.ViewModels
         private readonly IDialogService dialogService;
         bool isCameraCalcDialog1Show = false;
         ICameraService cam1, cam2,cam3,cam4;
-        IPLCModbusService plc;
+        IPLCModbusService plc1,plc2;
         Param param;
         #endregion
         #region 属性绑定
@@ -54,11 +54,17 @@ namespace ShellOrientation.ViewModels
             get { return camera4State; }
             set { SetProperty(ref camera4State, value); }
         }
-        private bool pLCState;
-        public bool PLCState
+        private bool pLC1State;
+        public bool PLC1State
         {
-            get { return pLCState; }
-            set { SetProperty(ref pLCState, value); }
+            get { return pLC1State; }
+            set { SetProperty(ref pLC1State, value); }
+        }
+        private bool pLC2State;
+        public bool PLC2State
+        {
+            get { return pLC2State; }
+            set { SetProperty(ref pLC2State, value); }
         }
         #endregion
         #region 方法绑定
@@ -85,14 +91,20 @@ namespace ShellOrientation.ViewModels
             cam4.CloseCamera();
             try
             {
-                plc.WriteMCoil(800, false);
-                plc.WriteMCoil(801, false);
-                plc.WriteMCoil(802, false);
-                plc.WriteMCoil(803, false);
+                plc1.WriteMCoil(800, false);
+                plc1.WriteMCoil(801, false);
+                plc1.WriteMCoil(802, false);
+                plc1.WriteMCoil(803, false);
+
+                plc2.WriteMCoil(800, false);
+                plc2.WriteMCoil(801, false);
+                plc2.WriteMCoil(802, false);
+                plc2.WriteMCoil(803, false);
             }
             catch { }
 
-            plc.Close();
+            plc1.Close();
+            plc2.Close();
         }
         void ExecuteMenuCommand(object obj)
         {
@@ -176,7 +188,8 @@ namespace ShellOrientation.ViewModels
             Camera2State = false;
             Camera3State = false;
             Camera4State = false;
-            PLCState = false;
+            PLC1State = false;
+            PLC2State = false;
             regionManager = _regionManager;
             aggregator = _aggregator;
             dialogService = _dialogService;
@@ -184,10 +197,13 @@ namespace ShellOrientation.ViewModels
             cam2 = containerProvider.Resolve<ICameraService>("Cam2");
             cam3 = containerProvider.Resolve<ICameraService>("Cam3");
             cam4 = containerProvider.Resolve<ICameraService>("Cam4");
-            plc = containerProvider.Resolve<IPLCModbusService>("plc");
+            plc1 = containerProvider.Resolve<IPLCModbusService>("plc1");
+            plc2 = containerProvider.Resolve<IPLCModbusService>("plc2");
             LoadParam();
-            var r1 = plc.Connect(param.PLCIP);
-            PLCState = r1;
+            var r1 = plc1.Connect(param.PLCIP1);
+            PLC1State = r1;
+            var r2 = plc2.Connect(param.PLCIP2);
+            PLC2State = r2;
             NlogConfig();
             aggregator.ResgiterMessage(arg => {
                 switch (arg.Message)

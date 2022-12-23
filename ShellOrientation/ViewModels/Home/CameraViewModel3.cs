@@ -76,7 +76,7 @@ namespace ShellOrientation.ViewModels.Home
             aggregator = _aggregator;
             LoadParam();
             cam = containerProvider.Resolve<ICameraService>("Cam3");
-            plc = containerProvider.Resolve<IPLCModbusService>("plc");
+            plc = containerProvider.Resolve<IPLCModbusService>("plc2");
             var r = cam.OpenCamera(param.Camera3Name, "DirectShow");//[0] Integrated Camera //[1] LRCP  USB2.0
             //M800-M803
             if (r)
@@ -118,6 +118,16 @@ namespace ShellOrientation.ViewModels.Home
             string filepath = $"Camera\\3";
             HTuple RotateDeg;
             HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "RotateDeg.tup"), out RotateDeg);
+            HTuple thresholdMin;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin.tup"), out thresholdMin);
+            HTuple thresholdMax;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax.tup"), out thresholdMax);
+            HTuple OpeningRec1Width;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width.tup"), out OpeningRec1Width);
+            HTuple OpeningRec1Height;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height.tup"), out OpeningRec1Height);
+            HTuple GapMax;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"), out GapMax);
             while (true)
             {
                 if (token.IsCancellationRequested)
@@ -130,6 +140,43 @@ namespace ShellOrientation.ViewModels.Home
                     HObject ho_ImageRotate;
                     HOperatorSet.RotateImage(cam.GrabeImageAsync(), out ho_ImageRotate, RotateDeg, "constant");
                     CameraIamge0 = new HImage(ho_ImageRotate);
+
+                    HObject rec1_0, rec1_1;
+                    HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
+                    HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
+                    HTuple hv_result; HObject hv_resultRegion1;
+                    ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_0, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, out hv_resultRegion1, out hv_result);
+                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        if (hv_result == 1)
+                        {
+                            CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                        }
+                        else
+                        {
+                            CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                        }
+                        CameraAppendHObject0 = null;
+                        CameraAppendHObject0 = hv_resultRegion1;
+                    }));
+                    plc.WriteMCoil(800, !(hv_result == 1));
+
+                    HObject hv_resultRegion2;
+                    ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_1, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, out hv_resultRegion2, out hv_result);
+
+                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        if (hv_result == 1)
+                        {
+                            CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                        }
+                        else
+                        {
+                            CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                        }
+                        CameraAppendHObject0 = hv_resultRegion2;
+                    }));
+                    plc.WriteMCoil(801, !(hv_result == 1));
                 }
                 catch (Exception ex)
                 {
