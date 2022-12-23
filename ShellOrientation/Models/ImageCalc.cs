@@ -98,10 +98,10 @@ namespace ShellOrientation.Models
             return;
         }
         public static void CalcOpeningRec1(HObject ho_image, HObject ho_Rectangle, HTuple ThresholdMin, HTuple ThresholdMax, HTuple OpeningRec1Width, HTuple OpeningRec1Height, HTuple GapMax,
-            out HObject ho_ConnectedRegions,out HTuple hv_isOK)
+            out HObject ho_ConnectedRegions, out HTuple hv_isOK)
         {
             // Local iconic variables 
-            HObject ho_ImageReduced, ho_GrayImage, ho_Region, ho_RegionFillUp;
+            HObject ho_ImageReduced, ho_GrayImage, ho_Region, ho_RegionFillUp, image2, image3;
             HObject ho_RegionOpening, ho_RegionDifference;
 
             // Local control variables 
@@ -110,6 +110,8 @@ namespace ShellOrientation.Models
             // Initialize local and output iconic variables 
             HOperatorSet.GenEmptyObj(out ho_ImageReduced);
             HOperatorSet.GenEmptyObj(out ho_GrayImage);
+            HOperatorSet.GenEmptyObj(out image2);
+            HOperatorSet.GenEmptyObj(out image3);
             HOperatorSet.GenEmptyObj(out ho_Region);
             HOperatorSet.GenEmptyObj(out ho_RegionFillUp);
             HOperatorSet.GenEmptyObj(out ho_RegionOpening);
@@ -117,9 +119,9 @@ namespace ShellOrientation.Models
             HOperatorSet.GenEmptyObj(out ho_ConnectedRegions);
             ho_ImageReduced.Dispose();
             HOperatorSet.ReduceDomain(ho_image, ho_Rectangle, out ho_ImageReduced);
-            ho_GrayImage.Dispose();
+            ho_GrayImage.Dispose(); image2.Dispose(); image3.Dispose();
             //HOperatorSet.Rgb1ToGray(ho_ImageReduced, out ho_GrayImage);
-            HOperatorSet.Decompose3(ho_ImageReduced, out ho_GrayImage, out _, out _);
+            HOperatorSet.Decompose3(ho_ImageReduced, out ho_GrayImage, out image2, out image3);
             ho_Region.Dispose();
             HOperatorSet.Threshold(ho_GrayImage, out ho_Region, ThresholdMin, ThresholdMax);
             ho_RegionFillUp.Dispose();
@@ -142,7 +144,7 @@ namespace ShellOrientation.Models
                 hv_isOK = 0;
             }
             ho_ImageReduced.Dispose();
-            ho_GrayImage.Dispose();
+            ho_GrayImage.Dispose(); image2.Dispose(); image3.Dispose();
             ho_Region.Dispose();
             ho_RegionFillUp.Dispose();
             ho_RegionOpening.Dispose();
