@@ -68,13 +68,13 @@
                             CommandParameter="1"
                             Content="线2"
                             Style="{StaticResource OperateButton}" />
-                        <Button
+                        <!--<Button
                             Command="{Binding CreateLineCommand}"
                             CommandParameter="2"
                             Content="线3"
-                            Style="{StaticResource OperateButton}" />
+                            Style="{StaticResource OperateButton}" />-->
                     </WrapPanel>
-                    <WrapPanel>
+                    <!--<WrapPanel>
                         <Button
                             Command="{Binding CreateLineCommand}"
                             CommandParameter="3"
@@ -91,7 +91,7 @@
                             Content="线6"
                             Style="{StaticResource OperateButton}" />
 
-                    </WrapPanel>
+                    </WrapPanel>-->
                     <WrapPanel>
 
                         <Button

@@ -154,6 +154,12 @@ namespace ShellOrientation.ViewModels
                     case "Camera1OpenNG":
                         Camera1State = false;
                         break;
+                    case "Camera2OpenOK":
+                        Camera2State = true;
+                        break;
+                    case "Camera2OpenNG":
+                        Camera2State = false;
+                        break;
                     default:
                         break;
                 }
