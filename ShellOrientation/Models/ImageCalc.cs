@@ -138,7 +138,7 @@ namespace ShellOrientation.Models
             HOperatorSet.Connection(ho_RegionDifference, out ho_ConnectedRegions);
 
             ho_SelectedRegions.Dispose();
-            HOperatorSet.SelectShape(ho_ConnectedRegions, out ho_SelectedRegions, (new HTuple("area")).TupleConcat("rect2_len2"), "and", new HTuple(6000).TupleConcat(30), new HTuple(999999).TupleConcat(299));//把细小的干扰滤除掉
+            HOperatorSet.SelectShape(ho_ConnectedRegions, out ho_SelectedRegions, new HTuple("area"), "and", new HTuple(200), new HTuple(999999));//把细小的干扰滤除掉
 
             HOperatorSet.RegionFeatures(ho_SelectedRegions, "width", out hv_widths);
 
