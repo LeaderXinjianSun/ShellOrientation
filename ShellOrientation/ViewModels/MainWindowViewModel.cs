@@ -80,7 +80,14 @@ namespace ShellOrientation.ViewModels
         private DelegateCommand appClosedEventCommand;
         public DelegateCommand AppClosedEventCommand =>
             appClosedEventCommand ?? (appClosedEventCommand = new DelegateCommand(ExecuteAppClosedEventCommand));
+        private DelegateCommand saveImageCommand;
+        public DelegateCommand SaveImageCommand =>
+            saveImageCommand ?? (saveImageCommand = new DelegateCommand(ExecuteSaveImageCommand));
 
+        void ExecuteSaveImageCommand()
+        {            
+            aggregator.SendMessage("SaveImage", "App");
+        }
         async void ExecuteAppClosedEventCommand()
         {
             aggregator.SendMessage("Closed", "App");

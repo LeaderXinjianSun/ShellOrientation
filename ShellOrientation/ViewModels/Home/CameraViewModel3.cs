@@ -100,6 +100,25 @@ namespace ShellOrientation.ViewModels.Home
                             source.Cancel();
                         }
                         break;
+                    case "SaveImage":
+                        if (r)
+                        {
+                            try
+                            {
+                                string filepath = $"SaveImage\\3";
+                                DirectoryInfo dir = new DirectoryInfo(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
+                                if (!dir.Exists)
+                                {
+                                    Directory.CreateDirectory(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
+                                }
+                                HOperatorSet.WriteImage(CameraIamge0, "jpeg", 0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"3_{DateTime.Now:yyyyMMdd_HHmmss}.jpg"));
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -139,6 +158,14 @@ namespace ShellOrientation.ViewModels.Home
             HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"), out OpeningRec1Height_2);
             HTuple GapMax_2;
             HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"), out GapMax_2);
+
+            HTuple IsExcludeRobotMove;
+            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "IsExcludeRobotMove.tup"), out IsExcludeRobotMove);
+
+            HObject iamgeSTX;
+            HOperatorSet.ReadImage(out iamgeSTX, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"executeRec1.jpg"));
+            HObject executeRec1;
+            HOperatorSet.ReadRegion(out executeRec1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.hobj"));
             while (true)
             {
                 if (token.IsCancellationRequested)
@@ -152,6 +179,31 @@ namespace ShellOrientation.ViewModels.Home
                     HOperatorSet.RotateImage(cam.GrabeImageAsync(), out ho_ImageRotate, RotateDeg, "constant");
                     CameraIamge0 = new HImage(ho_ImageRotate);
 
+                    if (IsExcludeRobotMove.I == 1)
+                    {
+
+                        HObject ho_resultRegion;
+                        HTuple hv_result0;
+                        ImageCalc.SubImage(CameraIamge0, iamgeSTX, executeRec1, out ho_resultRegion, out hv_result0);
+
+                        if (hv_result0.I == 0)
+                        {
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                CameraGCStyle0 = new Tuple<string, object>("DrawMode", "fill");
+                                CameraGCStyle0 = new Tuple<string, object>("Color", "orange red");
+                                CameraAppendHObject0 = null;
+                                CameraAppendHObject0 = ho_resultRegion;
+                                CameraAppendHMessage0 = null;
+                                CameraAppendHMessage0 = new HMsgEntry("画面有干扰，不做计算。", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                            }));
+                            plc.WriteMCoil(800, false);
+                            plc.WriteMCoil(801, false);
+                            Thread.Sleep(100);
+                            continue;
+                        }
+                    }
+
                     HObject rec1_0, rec1_1;
                     HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
                     HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
@@ -161,13 +213,14 @@ namespace ShellOrientation.ViewModels.Home
                     {
                         if (hv_result == 1)
                         {
+                            CameraAppendHMessage0 = new HMsgEntry("1:OK", 10, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
                             CameraGCStyle0 = new Tuple<string, object>("Color", "green");
                         }
                         else
                         {
+                            CameraAppendHMessage0 = new HMsgEntry("1:NG", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
                             CameraGCStyle0 = new Tuple<string, object>("Color", "red");
                         }
-                        CameraAppendHObject0 = null;
                         CameraAppendHObject0 = hv_resultRegion1;
                     }));
                     plc.WriteMCoil(800, !(hv_result == 1));
@@ -179,10 +232,12 @@ namespace ShellOrientation.ViewModels.Home
                     {
                         if (hv_result == 1)
                         {
+                            CameraAppendHMessage0 = new HMsgEntry("2:OK", 40, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
                             CameraGCStyle0 = new Tuple<string, object>("Color", "green");
                         }
                         else
                         {
+                            CameraAppendHMessage0 = new HMsgEntry("2:NG", 40, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
                             CameraGCStyle0 = new Tuple<string, object>("Color", "red");
                         }
                         CameraAppendHObject0 = hv_resultRegion2;

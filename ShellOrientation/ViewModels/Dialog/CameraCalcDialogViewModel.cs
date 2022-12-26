@@ -128,6 +128,12 @@ namespace ShellOrientation.ViewModels.Dialog
             get { return gapMax_2; }
             set { SetProperty(ref gapMax_2, value); }
         }
+        private bool isExcludeRobotMove;
+        public bool IsExcludeRobotMove
+        {
+            get { return isExcludeRobotMove; }
+            set { SetProperty(ref isExcludeRobotMove, value); }
+        }
         #endregion
         #region 方法绑定
         private DelegateCommand<object> cameraOperateCommand;
@@ -142,64 +148,152 @@ namespace ShellOrientation.ViewModels.Dialog
         private DelegateCommand<object> textBoxLostFocusEventCommand;
         public DelegateCommand<object> TextBoxLostFocusEventCommand =>
             textBoxLostFocusEventCommand ?? (textBoxLostFocusEventCommand = new DelegateCommand<object>(ExecuteTextBoxLostFocusEventCommand));
+        private DelegateCommand checkBoxCommand;
+        public DelegateCommand CheckBoxCommand =>
+            checkBoxCommand ?? (checkBoxCommand = new DelegateCommand(ExecuteCheckBoxCommand));
+        private DelegateCommand createExcludeRobotMoveCommand;
+        public DelegateCommand CreateExcludeRobotMoveCommand =>
+            createExcludeRobotMoveCommand ?? (createExcludeRobotMoveCommand = new DelegateCommand(ExecuteCreateExcludeRobotMoveCommand));
 
+        void ExecuteCreateExcludeRobotMoveCommand()
+        {
+            string filepath = $"Camera\\{index + 1}";
+            try
+            {
+                ROI roi = Global.CameraImageViewer.DrawROI(ROI.ROI_TYPE_RECTANGLE1);
+                var executeRec1 = roi.getRegion();
+                CameraGCStyle0 = new Tuple<string, object>("Color", "cyan");
+                CameraAppendHObject0 = null;
+                CameraAppendHObject0 = executeRec1;
+                HTuple executeRec1Row1;
+                HOperatorSet.RegionFeatures(executeRec1, "row1", out executeRec1Row1);
+                HTuple executeRec1Column1;
+                HOperatorSet.RegionFeatures(executeRec1, "column1", out executeRec1Column1);
+                HTuple executeRec1Width;
+                HOperatorSet.RegionFeatures(executeRec1, "width", out executeRec1Width);
+                HTuple executeRec1Height;
+                HOperatorSet.RegionFeatures(executeRec1, "height", out executeRec1Height);
+                HObject imagePart;
+                HOperatorSet.CropPart(CameraIamge0, out imagePart, executeRec1Row1, executeRec1Column1, executeRec1Width, executeRec1Height);
+                DirectoryInfo dir = new DirectoryInfo(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
+                if (!dir.Exists)
+                {
+                    Directory.CreateDirectory(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
+                }
+                HOperatorSet.WriteRegion(executeRec1, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "executeRec1.hobj"));
+                HOperatorSet.WriteImage(imagePart, "jpeg", 0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.jpg"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+        void ExecuteCheckBoxCommand()
+        {
+            string filepath = $"Camera\\{index + 1}";
+            try
+            {
+                int v1 = IsExcludeRobotMove ? 1 : 0;
+                HOperatorSet.WriteTuple(new HTuple(v1), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "IsExcludeRobotMove.tup"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
+        }
         void ExecuteTextBoxLostFocusEventCommand(object obj)
         {
             string filepath = $"Camera\\{index + 1}";
-            switch (obj.ToString())
+            try
             {
-                case "RotateDeg":
-                    HOperatorSet.WriteTuple(new HTuple(RotateDeg),System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "RotateDeg.tup"));
-                    break;
-                case "ThresholdMin":
-                    HOperatorSet.WriteTuple(new HTuple(ThresholdMin), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin.tup"));
-                    break;
-                case "ThresholdMax":
-                    HOperatorSet.WriteTuple(new HTuple(ThresholdMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax.tup"));
-                    break;
-                case "OpeningRec1Width":
-                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Width), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width.tup"));
-                    break;
-                case "OpeningRec1Height":
-                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Height), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height.tup"));
-                    break;
-                case "GapMax":
-                    HOperatorSet.WriteTuple(new HTuple(GapMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"));
-                    break;
-                case "ThresholdMin_2":
-                    HOperatorSet.WriteTuple(new HTuple(ThresholdMin_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin_2.tup"));
-                    break;
-                case "ThresholdMax_2":
-                    HOperatorSet.WriteTuple(new HTuple(ThresholdMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax_2.tup"));
-                    break;
-                case "OpeningRec1Width_2":
-                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Width_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width_2.tup"));
-                    break;
-                case "OpeningRec1Height_2":
-                    HOperatorSet.WriteTuple(new HTuple(OpeningRec1Height_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"));
-                    break;
-                case "GapMax_2":
-                    HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"));
-                    break;
-                default:
-                    break;
+                switch (obj.ToString())
+                {
+                    case "RotateDeg":
+                        HOperatorSet.WriteTuple(new HTuple(RotateDeg), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "RotateDeg.tup"));
+                        break;
+                    case "ThresholdMin":
+                        HOperatorSet.WriteTuple(new HTuple(ThresholdMin), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin.tup"));
+                        break;
+                    case "ThresholdMax":
+                        HOperatorSet.WriteTuple(new HTuple(ThresholdMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax.tup"));
+                        break;
+                    case "OpeningRec1Width":
+                        HOperatorSet.WriteTuple(new HTuple(OpeningRec1Width), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width.tup"));
+                        break;
+                    case "OpeningRec1Height":
+                        HOperatorSet.WriteTuple(new HTuple(OpeningRec1Height), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height.tup"));
+                        break;
+                    case "GapMax":
+                        HOperatorSet.WriteTuple(new HTuple(GapMax), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"));
+                        break;
+                    case "ThresholdMin_2":
+                        HOperatorSet.WriteTuple(new HTuple(ThresholdMin_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin_2.tup"));
+                        break;
+                    case "ThresholdMax_2":
+                        HOperatorSet.WriteTuple(new HTuple(ThresholdMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax_2.tup"));
+                        break;
+                    case "OpeningRec1Width_2":
+                        HOperatorSet.WriteTuple(new HTuple(OpeningRec1Width_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width_2.tup"));
+                        break;
+                    case "OpeningRec1Height_2":
+                        HOperatorSet.WriteTuple(new HTuple(OpeningRec1Height_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"));
+                        break;
+                    case "GapMax_2":
+                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"));
+                        break;
+                    default:
+                        break;
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
         }
         void ExecuteCalcCommand()
         {
             string filepath = $"Camera\\{index + 1}";
+            if (IsExcludeRobotMove)
+            {
+                HObject iamgeSTX;
+                HOperatorSet.ReadImage(out iamgeSTX, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"executeRec1.jpg"));
+                HObject executeRec1;
+                HOperatorSet.ReadRegion(out executeRec1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.hobj"));
+                HObject ho_resultRegion;
+                HTuple hv_result0;
+                ImageCalc.SubImage(CameraIamge0, iamgeSTX, executeRec1,out ho_resultRegion,out hv_result0);
+
+                if (hv_result0.I == 0)
+                {
+                    CameraGCStyle0 = new Tuple<string, object>("DrawMode", "fill");
+                    CameraGCStyle0 = new Tuple<string, object>("Color", "orange red");
+                    CameraAppendHObject0 = null;
+                    CameraAppendHObject0 = ho_resultRegion;
+                    CameraAppendHMessage0 = null;
+                    CameraAppendHMessage0 = new HMsgEntry("画面有干扰，不做计算。", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                    return;
+                }
+                iamgeSTX.Dispose();
+                executeRec1.Dispose();
+            }
             HObject rec1_0, rec1_1;
             HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
             HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
             HTuple hv_result;HObject hv_resultRegion1;
             ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0,ThresholdMin,ThresholdMax,OpeningRec1Width,OpeningRec1Height,GapMax,out hv_resultRegion1,out hv_result);
-            Console.WriteLine(hv_result.ToString());
+        
+            CameraAppendHMessage0 = null;
             if (hv_result == 1)
             {
+                CameraAppendHMessage0 = new HMsgEntry("1:OK", 10, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
                 CameraGCStyle0 = new Tuple<string, object>("Color", "green");
             }
             else
             {
+                CameraAppendHMessage0 = new HMsgEntry("1:NG", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
                 CameraGCStyle0 = new Tuple<string, object>("Color", "red");
             }
             CameraAppendHObject0 = null;
@@ -207,13 +301,15 @@ namespace ShellOrientation.ViewModels.Dialog
 
             HObject hv_resultRegion2;
             ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_1, ThresholdMin_2, ThresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, out hv_resultRegion2, out hv_result);
-            Console.WriteLine(hv_result.ToString());
+         
             if (hv_result == 1)
             {
+                CameraAppendHMessage0 = new HMsgEntry("2:OK", 40, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
                 CameraGCStyle0 = new Tuple<string, object>("Color", "green");
             }
             else
             {
+                CameraAppendHMessage0 = new HMsgEntry("2:NG", 40, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
                 CameraGCStyle0 = new Tuple<string, object>("Color", "red");
             }
             CameraAppendHObject0 = hv_resultRegion2;
@@ -225,6 +321,7 @@ namespace ShellOrientation.ViewModels.Dialog
             string filepath = $"Camera\\{index + 1}";
             ROI roi = Global.CameraImageViewer.DrawROI(ROI.ROI_TYPE_RECTANGLE1);
             var line = roi.getRegion();
+            CameraGCStyle0 = new Tuple<string, object>("Color", "violet");
             CameraAppendHObject0 = null;
             CameraAppendHObject0 = line;
             DirectoryInfo dir = new DirectoryInfo(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
@@ -322,6 +419,9 @@ namespace ShellOrientation.ViewModels.Dialog
 
                 HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"), out v1);
                 GapMax_2 = v1.D;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "IsExcludeRobotMove.tup"), out v1);
+                IsExcludeRobotMove = v1.I == 1;
             }
             catch { }
         }
