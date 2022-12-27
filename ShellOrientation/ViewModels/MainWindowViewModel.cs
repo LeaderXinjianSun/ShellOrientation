@@ -13,6 +13,7 @@ using ShellOrientation.Models;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ShellOrientation.ViewModels
 {
@@ -180,12 +181,32 @@ namespace ShellOrientation.ViewModels
             //File.WriteAllText(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Param.json"), jsonString);
             //Console.WriteLine("Success");
         }
-        void ExecuteAppLoadedEventCommand()
+        async void ExecuteAppLoadedEventCommand()
         {
             regionManager.Regions["CameraRegion1"].RequestNavigate("View1");
             regionManager.Regions["CameraRegion2"].RequestNavigate("View2");
             regionManager.Regions["CameraRegion3"].RequestNavigate("View3");
             regionManager.Regions["CameraRegion4"].RequestNavigate("View4");
+            var r1 = await Task.Run(() => { return plc1.Connect(param.PLCIP1); });
+            PLC1State = r1;
+            if (r1)
+            {
+                aggregator.SendMessage("PLC1Connect", "App");
+            }
+            else
+            {
+                MessageBox.Show($"PLC:{param.PLCIP1}连接失败", "确认", MessageBoxButtons.OK);
+            }
+            var r2 = await Task.Run(() => { return plc2.Connect(param.PLCIP2); });
+            PLC2State = r2;
+            if (r2)
+            {
+                aggregator.SendMessage("PLC2Connect", "App");
+            }
+            else
+            {
+                MessageBox.Show($"PLC:{param.PLCIP2}连接失败", "确认", MessageBoxButtons.OK);
+            }
         }
         #endregion
         #region 构造函数
@@ -207,10 +228,7 @@ namespace ShellOrientation.ViewModels
             plc1 = containerProvider.Resolve<IPLCModbusService>("plc1");
             plc2 = containerProvider.Resolve<IPLCModbusService>("plc2");
             LoadParam();
-            var r1 = plc1.Connect(param.PLCIP1);
-            PLC1State = r1;
-            var r2 = plc2.Connect(param.PLCIP2);
-            PLC2State = r2;
+
             NlogConfig();
             aggregator.ResgiterMessage(arg => {
                 switch (arg.Message)

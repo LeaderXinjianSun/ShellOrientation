@@ -26,6 +26,7 @@ namespace ShellOrientation.ViewModels.Home
         private static Logger logger = LogManager.GetCurrentClassLogger();
         CancellationTokenSource source;
         Param param;
+        bool plcConnect = false;
         #endregion
         #region 属性
         #region halcon
@@ -124,6 +125,9 @@ namespace ShellOrientation.ViewModels.Home
                             }
                         }
                         break;
+                    case "PLC1Connect":
+                        plcConnect = true;
+                        break;
                     default:
                         break;
                 }
@@ -155,37 +159,31 @@ namespace ShellOrientation.ViewModels.Home
         private void Run(CancellationToken token)
         {
             string filepath = $"Camera\\2";
-            HTuple RotateDeg;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "RotateDeg.tup"), out RotateDeg);
-            HTuple thresholdMin;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin.tup"), out thresholdMin);
-            HTuple thresholdMax;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax.tup"), out thresholdMax);
-            HTuple OpeningRec1Width;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width.tup"), out OpeningRec1Width);
-            HTuple OpeningRec1Height;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height.tup"), out OpeningRec1Height);
-            HTuple GapMax;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"), out GapMax);
-
-            HTuple thresholdMin_2;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin_2.tup"), out thresholdMin_2);
-            HTuple thresholdMax_2;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax_2.tup"), out thresholdMax_2);
-            HTuple OpeningRec1Width_2;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width_2.tup"), out OpeningRec1Width_2);
-            HTuple OpeningRec1Height_2;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"), out OpeningRec1Height_2);
-            HTuple GapMax_2;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"), out GapMax_2);
-
-            HTuple IsExcludeRobotMove;
-            HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "IsExcludeRobotMove.tup"), out IsExcludeRobotMove);
-
-            HObject iamgeSTX;
-            HOperatorSet.ReadImage(out iamgeSTX, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"executeRec1.jpg"));
-            HObject executeRec1;
-            HOperatorSet.ReadRegion(out executeRec1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.hobj"));
+            HTuple RotateDeg, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, thresholdMin_2, thresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2,
+    GapMax_2, IsExcludeRobotMove;
+            HObject iamgeSTX, executeRec1;
+            try
+            {
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "RotateDeg.tup"), out RotateDeg);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin.tup"), out thresholdMin);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax.tup"), out thresholdMax);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width.tup"), out OpeningRec1Width);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height.tup"), out OpeningRec1Height);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"), out GapMax);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin_2.tup"), out thresholdMin_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax_2.tup"), out thresholdMax_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width_2.tup"), out OpeningRec1Width_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"), out OpeningRec1Height_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"), out GapMax_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "IsExcludeRobotMove.tup"), out IsExcludeRobotMove);
+                HOperatorSet.ReadImage(out iamgeSTX, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"executeRec1.jpg"));
+                HOperatorSet.ReadRegion(out executeRec1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.hobj"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
             while (true)
             {
                 if (token.IsCancellationRequested)
@@ -194,9 +192,27 @@ namespace ShellOrientation.ViewModels.Home
                 }
                 try
                 {
-
+                    var img = cam.GrabeImageAsync();
+                    if (img == null)
+                    {
+                        aggregator.SendMessage("Camera2OpenNG", "Camera");
+                        cam.CloseCamera();
+                        Thread.Sleep(1000);
+                        var r = cam.OpenCamera(param.Camera2Name, "DirectShow");
+                        if (r)
+                        {
+                            cam.GrabeImageStart();
+                            aggregator.SendMessage("Camera2OpenOK", "Camera");
+                            logger.Info("②相机重连:成功");
+                        }
+                        else
+                        {
+                            logger.Info("②相机重连:失败");
+                        }
+                        continue;
+                    }
                     HObject ho_ImageRotate;
-                    HOperatorSet.RotateImage(cam.GrabeImageAsync(), out ho_ImageRotate, RotateDeg, "constant");
+                    HOperatorSet.RotateImage(img, out ho_ImageRotate, RotateDeg, "constant");
                     CameraIamge0 = new HImage(ho_ImageRotate);
 
                     if (IsExcludeRobotMove.I == 1)
@@ -217,8 +233,11 @@ namespace ShellOrientation.ViewModels.Home
                                 CameraAppendHMessage0 = null;
                                 CameraAppendHMessage0 = new HMsgEntry("画面有干扰，不做计算。", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
                             }));
-                            plc.WriteMCoil(802, false);
-                            plc.WriteMCoil(803, false);
+                            if (plcConnect)
+                            {
+                                plc.WriteMCoil(802, false);
+                                plc.WriteMCoil(803, false);
+                            }
                             Thread.Sleep(100);
                             continue;
                         }
@@ -243,7 +262,8 @@ namespace ShellOrientation.ViewModels.Home
                         }
                         CameraAppendHObject0 = hv_resultRegion1;
                     }));
-                    plc.WriteMCoil(802, !(hv_result == 1));
+                    if (plcConnect)
+                        plc.WriteMCoil(802, !(hv_result == 1));
 
                     HObject hv_resultRegion2;
                     ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_1, thresholdMin_2, thresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, out hv_resultRegion2, out hv_result);
@@ -262,7 +282,8 @@ namespace ShellOrientation.ViewModels.Home
                         }
                         CameraAppendHObject0 = hv_resultRegion2;
                     }));
-                    plc.WriteMCoil(803, !(hv_result == 1));
+                    if (plcConnect)
+                        plc.WriteMCoil(803, !(hv_result == 1));
                 }
                 catch (Exception ex)
                 {

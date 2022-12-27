@@ -256,65 +256,70 @@ namespace ShellOrientation.ViewModels.Dialog
         void ExecuteCalcCommand()
         {
             string filepath = $"Camera\\{index + 1}";
-            if (IsExcludeRobotMove)
+            try
             {
-                HObject iamgeSTX;
-                HOperatorSet.ReadImage(out iamgeSTX, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"executeRec1.jpg"));
-                HObject executeRec1;
-                HOperatorSet.ReadRegion(out executeRec1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.hobj"));
-                HObject ho_resultRegion;
-                HTuple hv_result0;
-                ImageCalc.SubImage(CameraIamge0, iamgeSTX, executeRec1,out ho_resultRegion,out hv_result0);
-
-                if (hv_result0.I == 0)
+                if (IsExcludeRobotMove)
                 {
-                    CameraGCStyle0 = new Tuple<string, object>("DrawMode", "fill");
-                    CameraGCStyle0 = new Tuple<string, object>("Color", "orange red");
-                    CameraAppendHObject0 = null;
-                    CameraAppendHObject0 = ho_resultRegion;
-                    CameraAppendHMessage0 = null;
-                    CameraAppendHMessage0 = new HMsgEntry("画面有干扰，不做计算。", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
-                    return;
+                    HObject iamgeSTX;
+                    HOperatorSet.ReadImage(out iamgeSTX, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"executeRec1.jpg"));
+                    HObject executeRec1;
+                    HOperatorSet.ReadRegion(out executeRec1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.hobj"));
+                    HObject ho_resultRegion;
+                    HTuple hv_result0;
+                    ImageCalc.SubImage(CameraIamge0, iamgeSTX, executeRec1, out ho_resultRegion, out hv_result0);
+
+                    if (hv_result0.I == 0)
+                    {
+                        CameraGCStyle0 = new Tuple<string, object>("DrawMode", "fill");
+                        CameraGCStyle0 = new Tuple<string, object>("Color", "orange red");
+                        CameraAppendHObject0 = null;
+                        CameraAppendHObject0 = ho_resultRegion;
+                        CameraAppendHMessage0 = null;
+                        CameraAppendHMessage0 = new HMsgEntry("画面有干扰，不做计算。", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                        return;
+                    }
+                    iamgeSTX.Dispose();
+                    executeRec1.Dispose();
                 }
-                iamgeSTX.Dispose();
-                executeRec1.Dispose();
-            }
-            HObject rec1_0, rec1_1;
-            HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
-            HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
-            HTuple hv_result;HObject hv_resultRegion1;
-            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0,ThresholdMin,ThresholdMax,OpeningRec1Width,OpeningRec1Height,GapMax,out hv_resultRegion1,out hv_result);
-        
-            CameraAppendHMessage0 = null;
-            if (hv_result == 1)
-            {
-                CameraAppendHMessage0 = new HMsgEntry("1:OK", 10, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
-                CameraGCStyle0 = new Tuple<string, object>("Color", "green");
-            }
-            else
-            {
-                CameraAppendHMessage0 = new HMsgEntry("1:NG", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
-                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
-            }
-            CameraAppendHObject0 = null;
-            CameraAppendHObject0 = hv_resultRegion1;
+                HObject rec1_0, rec1_1;
+                HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
+                HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
+                HTuple hv_result; HObject hv_resultRegion1;
+                ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0, ThresholdMin, ThresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, out hv_resultRegion1, out hv_result);
 
-            HObject hv_resultRegion2;
-            ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_1, ThresholdMin_2, ThresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, out hv_resultRegion2, out hv_result);
-         
-            if (hv_result == 1)
-            {
-                CameraAppendHMessage0 = new HMsgEntry("2:OK", 40, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
-                CameraGCStyle0 = new Tuple<string, object>("Color", "green");
-            }
-            else
-            {
-                CameraAppendHMessage0 = new HMsgEntry("2:NG", 40, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
-                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
-            }
-            CameraAppendHObject0 = hv_resultRegion2;
+                CameraAppendHMessage0 = null;
+                if (hv_result == 1)
+                {
+                    CameraAppendHMessage0 = new HMsgEntry("1:OK", 10, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
+                    CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                }
+                else
+                {
+                    CameraAppendHMessage0 = new HMsgEntry("1:NG", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                    CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                }
+                CameraAppendHObject0 = null;
+                CameraAppendHObject0 = hv_resultRegion1;
 
+                HObject hv_resultRegion2;
+                ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_1, ThresholdMin_2, ThresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, out hv_resultRegion2, out hv_result);
 
+                if (hv_result == 1)
+                {
+                    CameraAppendHMessage0 = new HMsgEntry("2:OK", 40, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
+                    CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                }
+                else
+                {
+                    CameraAppendHMessage0 = new HMsgEntry("2:NG", 40, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                    CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                }
+                CameraAppendHObject0 = hv_resultRegion2;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
         void ExecuteCreateLineCommand(object obj)
         {
@@ -337,9 +342,21 @@ namespace ShellOrientation.ViewModels.Dialog
             {
                 case "拍照":
                     //CameraIamge0 = cam.GrabeImageAsync();
-                    HObject ho_ImageRotate;
-                    HOperatorSet.RotateImage(cam.GrabeImageAsync(), out ho_ImageRotate, RotateDeg, "constant");
-                    CameraIamge0 = new HImage(ho_ImageRotate);
+                    try
+                    {
+                        HObject ho_ImageRotate;
+                        var img = cam.GrabeImageAsync();
+                        if (img != null)
+                        {
+                            HOperatorSet.RotateImage(img, out ho_ImageRotate, RotateDeg, "constant");
+                            CameraIamge0 = new HImage(ho_ImageRotate);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+               
                     break;
                 case "打开":
                     {
