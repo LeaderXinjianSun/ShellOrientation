@@ -83,10 +83,10 @@
                         Command="{Binding SaveImageCommand}"
                         Content="存图 "
                         Style="{StaticResource OperateButton}" />
-                    <Button
+                    <!--<Button
                         Command="{Binding TestCommand}"
                         Content="测试 "
-                        Style="{StaticResource OperateButton}" />
+                        Style="{StaticResource OperateButton}" />-->
                 </WrapPanel>
             </GroupBox>
         </Grid>

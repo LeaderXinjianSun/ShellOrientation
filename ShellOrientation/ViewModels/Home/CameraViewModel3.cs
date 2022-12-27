@@ -28,6 +28,10 @@ namespace ShellOrientation.ViewModels.Home
         CancellationTokenSource source;
         Param param;
         bool plcConnect = false;
+        HTuple RotateDeg, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, thresholdMin_2, thresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2,
+GapMax_2, IsExcludeRobotMove;
+        HObject iamgeSTX, executeRec1;
+        HObject rec1_0, rec1_1;
         #endregion
         #region 属性
         #region halcon
@@ -123,6 +127,11 @@ namespace ShellOrientation.ViewModels.Home
                     case "PLC2Connect":
                         plcConnect = true;
                         break;
+                    case "ReloadCamera3Param":
+                        {
+                            LoadCameraParm();
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -137,33 +146,7 @@ namespace ShellOrientation.ViewModels.Home
             param = JsonConvert.DeserializeObject<Param>(jsonString);
         }
         private void Run(CancellationToken token)
-        {
-            string filepath = $"Camera\\3";
-            HTuple RotateDeg, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, thresholdMin_2, thresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2,
-    GapMax_2, IsExcludeRobotMove;
-            HObject iamgeSTX, executeRec1;
-            try
-            {
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "RotateDeg.tup"), out RotateDeg);
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin.tup"), out thresholdMin);
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax.tup"), out thresholdMax);
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width.tup"), out OpeningRec1Width);
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height.tup"), out OpeningRec1Height);
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"), out GapMax);
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin_2.tup"), out thresholdMin_2);
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax_2.tup"), out thresholdMax_2);
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width_2.tup"), out OpeningRec1Width_2);
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"), out OpeningRec1Height_2);
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"), out GapMax_2);
-                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "IsExcludeRobotMove.tup"), out IsExcludeRobotMove);
-                HOperatorSet.ReadImage(out iamgeSTX, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"executeRec1.jpg"));
-                HOperatorSet.ReadRegion(out executeRec1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.hobj"));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return;
-            }
+        {            
             while (true)
             {
                 if (token.IsCancellationRequested)
@@ -223,9 +206,6 @@ namespace ShellOrientation.ViewModels.Home
                         }
                     }
 
-                    HObject rec1_0, rec1_1;
-                    HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
-                    HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
                     HTuple hv_result; HObject hv_resultRegion1;
                     ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_0, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, out hv_resultRegion1, out hv_result);
                     System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
@@ -267,9 +247,38 @@ namespace ShellOrientation.ViewModels.Home
                 }
                 catch (Exception ex)
                 {
-
+                    Console.WriteLine(ex.Message);
+                    LoadCameraParm();
                 }
                 Thread.Sleep(100);
+            }
+        }
+        private void LoadCameraParm()
+        {
+            string filepath = $"Camera\\3";
+            try
+            {
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "RotateDeg.tup"), out RotateDeg);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin.tup"), out thresholdMin);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax.tup"), out thresholdMax);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width.tup"), out OpeningRec1Width);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height.tup"), out OpeningRec1Height);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax.tup"), out GapMax);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMin_2.tup"), out thresholdMin_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "ThresholdMax_2.tup"), out thresholdMax_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Width_2.tup"), out OpeningRec1Width_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"), out OpeningRec1Height_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"), out GapMax_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "IsExcludeRobotMove.tup"), out IsExcludeRobotMove);
+                HOperatorSet.ReadImage(out iamgeSTX, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"executeRec1.jpg"));
+                HOperatorSet.ReadRegion(out executeRec1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.hobj"));
+                HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
+                HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
             }
         }
         #endregion

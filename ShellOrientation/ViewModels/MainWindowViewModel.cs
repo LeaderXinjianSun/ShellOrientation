@@ -1,6 +1,7 @@
 ﻿
 
 using Newtonsoft.Json;
+using NLog;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
@@ -27,6 +28,7 @@ namespace ShellOrientation.ViewModels
         ICameraService cam1, cam2,cam3,cam4;
         IPLCModbusService plc1,plc2;
         Param param;
+        private static Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
         #region 属性绑定
         public string Title { get; set; } = "ShellOrientationUI";
@@ -89,10 +91,10 @@ namespace ShellOrientation.ViewModels
         {            
             aggregator.SendMessage("SaveImage", "App");
         }
-        async void ExecuteAppClosedEventCommand()
+        void ExecuteAppClosedEventCommand()
         {
             aggregator.SendMessage("Closed", "App");
-            await Task.Delay(500);
+            //await Task.Delay(500);
             cam1.CloseCamera();
             cam2.CloseCamera();
             cam3.CloseCamera();
@@ -113,6 +115,7 @@ namespace ShellOrientation.ViewModels
 
             plc1.Close();
             plc2.Close();
+            logger.Info("软件关闭");
         }
         void ExecuteMenuCommand(object obj)
         {
@@ -127,6 +130,7 @@ namespace ShellOrientation.ViewModels
                         dialogService.Show("CameraCalcDialog", param, arg =>
                         {
                             isCameraCalcDialog1Show = false;
+                            aggregator.SendMessage("ReloadCamera1Param", "App");
                         });
                     }
                     break;
@@ -139,6 +143,7 @@ namespace ShellOrientation.ViewModels
                         dialogService.Show("CameraCalcDialog", param, arg =>
                         {
                             isCameraCalcDialog1Show = false;
+                            aggregator.SendMessage("ReloadCamera2Param", "App");
                         });
                     }
                     break;
@@ -151,6 +156,7 @@ namespace ShellOrientation.ViewModels
                         dialogService.Show("CameraCalcDialog", param, arg =>
                         {
                             isCameraCalcDialog1Show = false;
+                            aggregator.SendMessage("ReloadCamera3Param", "App");
                         });
                     }
                     break;
@@ -163,6 +169,7 @@ namespace ShellOrientation.ViewModels
                         dialogService.Show("CameraCalcDialog", param, arg =>
                         {
                             isCameraCalcDialog1Show = false;
+                            aggregator.SendMessage("ReloadCamera4Param", "App");
                         });
                     }
                     break;
@@ -183,6 +190,7 @@ namespace ShellOrientation.ViewModels
         }
         async void ExecuteAppLoadedEventCommand()
         {
+            logger.Info("软件开启");
             regionManager.Regions["CameraRegion1"].RequestNavigate("View1");
             regionManager.Regions["CameraRegion2"].RequestNavigate("View2");
             regionManager.Regions["CameraRegion3"].RequestNavigate("View3");
@@ -207,6 +215,7 @@ namespace ShellOrientation.ViewModels
             {
                 MessageBox.Show($"PLC:{param.PLCIP2}连接失败", "确认", MessageBoxButtons.OK);
             }
+            
         }
         #endregion
         #region 构造函数
