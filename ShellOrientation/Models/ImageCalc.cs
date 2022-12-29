@@ -102,7 +102,7 @@ namespace ShellOrientation.Models
         {
             // Local iconic variables 
             HObject ho_ImageReduced, ho_GrayImage, ho_Region, ho_RegionFillUp, image2, image3, ho_ConnectedRegions;
-            HObject ho_RegionOpening, ho_RegionDifference;
+            HObject ho_RegionOpening0, ho_RegionOpening, ho_RegionDifference;
 
             // Local control variables 
 
@@ -114,6 +114,7 @@ namespace ShellOrientation.Models
             HOperatorSet.GenEmptyObj(out image3);
             HOperatorSet.GenEmptyObj(out ho_Region);
             HOperatorSet.GenEmptyObj(out ho_RegionFillUp);
+            HOperatorSet.GenEmptyObj(out ho_RegionOpening0);
             HOperatorSet.GenEmptyObj(out ho_RegionOpening);
             HOperatorSet.GenEmptyObj(out ho_RegionDifference);
             HOperatorSet.GenEmptyObj(out ho_ConnectedRegions);
@@ -125,8 +126,12 @@ namespace ShellOrientation.Models
             HOperatorSet.Decompose3(ho_ImageReduced, out ho_GrayImage, out image2, out image3);
             ho_Region.Dispose();
             HOperatorSet.Threshold(ho_GrayImage, out ho_Region, ThresholdMin, ThresholdMax);
+
+            ho_RegionOpening0.Dispose();
+            HOperatorSet.OpeningRectangle1(ho_Region, out ho_RegionOpening0, OpeningRec1Width, 20);//把毛刺先滤除一遍。轨道发白
+
             ho_RegionFillUp.Dispose();
-            HOperatorSet.FillUp(ho_Region, out ho_RegionFillUp);
+            HOperatorSet.FillUp(ho_RegionOpening0, out ho_RegionFillUp);
 
             ho_RegionOpening.Dispose();
             HOperatorSet.OpeningRectangle1(ho_RegionFillUp, out ho_RegionOpening, OpeningRec1Width, OpeningRec1Height);
@@ -138,7 +143,7 @@ namespace ShellOrientation.Models
             HOperatorSet.Connection(ho_RegionDifference, out ho_ConnectedRegions);
 
             ho_SelectedRegions.Dispose();
-            HOperatorSet.SelectShape(ho_ConnectedRegions, out ho_SelectedRegions, new HTuple("area"), "and", new HTuple(200), new HTuple(999999));//把细小的干扰滤除掉
+            HOperatorSet.SelectShape(ho_ConnectedRegions, out ho_SelectedRegions, new HTuple("area").TupleConcat("height"), "and", new HTuple(200).TupleConcat(50), new HTuple(999999).TupleConcat(999999));//把细小的干扰滤除掉。太窄的也去掉
 
             HOperatorSet.RegionFeatures(ho_SelectedRegions, "width", out hv_widths);
 
@@ -159,6 +164,7 @@ namespace ShellOrientation.Models
             ho_GrayImage.Dispose(); image2.Dispose(); image3.Dispose();
             ho_Region.Dispose();
             ho_RegionFillUp.Dispose();
+            ho_RegionOpening0.Dispose();
             ho_RegionOpening.Dispose();
             ho_RegionDifference.Dispose();
             ho_ConnectedRegions.Dispose();
