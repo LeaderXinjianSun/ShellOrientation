@@ -103,12 +103,26 @@
 
             </GroupBox>
         </StackPanel>
-        <GroupBox Grid.Row="1" Header="参数">
+        <GroupBox
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            Header="参数">
             <Grid>
                 <Grid.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Width" Value="80" />
+                    <Style x:Key="textBlockBase" TargetType="TextBlock">
                         <Setter Property="VerticalAlignment" Value="Center" />
+                    </Style>
+                    <Style
+                        x:Key="paramName"
+                        BasedOn="{StaticResource textBlockBase}"
+                        TargetType="TextBlock">
+                        <Setter Property="Width" Value="80" />
+                    </Style>
+                    <Style
+                        x:Key="paramUnit"
+                        BasedOn="{StaticResource textBlockBase}"
+                        TargetType="TextBlock">
+                        <Setter Property="Width" Value="30" />
                     </Style>
                     <Style TargetType="TextBox">
                         <Setter Property="Width" Value="60" />
@@ -123,7 +137,7 @@
                 <StackPanel>
                     <WrapPanel>
                         <StackPanel Style="{StaticResource stackPanelCell}">
-                            <TextBlock Text="图像矫正角度" />
+                            <TextBlock Style="{StaticResource paramName}" Text="图像矫正角度" />
                             <TextBox Text="{Binding RotateDeg}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="LostFocus">
@@ -141,120 +155,218 @@
                     </WrapPanel>
                     <StackPanel Orientation="Horizontal">
                         <GroupBox Header="区域1">
-                            <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="塑壳阈值min" />
+                                        <TextBox Text="{Binding ThresholdMin}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="ThresholdMin" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="塑壳阈值max" />
+                                        <TextBox Text="{Binding ThresholdMax}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="ThresholdMax" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="剃边矩形宽" />
+                                        <TextBox Text="{Binding OpeningRec1Width}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="OpeningRec1Width" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="剃边矩形高" />
+                                        <TextBox Text="{Binding OpeningRec1Height}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="OpeningRec1Height" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="判定间隙" />
+                                        <TextBox Text="{Binding GapMax}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="GapMax" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
 
-                                <StackPanel Style="{StaticResource stackPanelCell}">
-                                    <TextBlock Text="塑壳阈值min" />
-                                    <TextBox Text="{Binding ThresholdMin}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="ThresholdMin" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
                                 </StackPanel>
-                                <StackPanel Style="{StaticResource stackPanelCell}">
-                                    <TextBlock Text="塑壳阈值max" />
-                                    <TextBox Text="{Binding ThresholdMax}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="ThresholdMax" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
-                                </StackPanel>
-                                <StackPanel Style="{StaticResource stackPanelCell}">
-                                    <TextBlock Text="剃边矩形宽" />
-                                    <TextBox Text="{Binding OpeningRec1Width}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="OpeningRec1Width" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
-                                    <TextBlock Text="像素" />
-                                </StackPanel>
-                                <StackPanel Style="{StaticResource stackPanelCell}">
-                                    <TextBlock Text="剃边矩形高" />
-                                    <TextBox Text="{Binding OpeningRec1Height}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="OpeningRec1Height" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
-                                    <TextBlock Text="像素" />
-                                </StackPanel>
-                                <StackPanel Style="{StaticResource stackPanelCell}">
-                                    <TextBlock Text="判定间隙" />
-                                    <TextBox Text="{Binding GapMax}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="GapMax" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
-                                    <TextBlock Text="像素" />
+                                <StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="除杂宽度" />
+                                        <TextBox Text="{Binding MussyWidth}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="MussyWidth" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="除杂高度" />
+                                        <TextBox Text="{Binding MussyHeight}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="MussyHeight" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="形状面积" />
+                                        <TextBox Text="{Binding DiffShapeArea}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="DiffShapeArea" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="形状高度" />
+                                        <TextBox Text="{Binding DiffShapeHeight}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="DiffShapeHeight" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
+
+
                         </GroupBox>
                         <GroupBox Header="区域2">
-                            <StackPanel>
-
-                                <StackPanel Style="{StaticResource stackPanelCell}">
-                                    <TextBlock Text="塑壳阈值min" />
-                                    <TextBox Text="{Binding ThresholdMin_2}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="ThresholdMin_2" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="塑壳阈值min" />
+                                        <TextBox Text="{Binding ThresholdMin_2}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="ThresholdMin_2" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="塑壳阈值max" />
+                                        <TextBox Text="{Binding ThresholdMax_2}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="ThresholdMax_2" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="剃边矩形宽" />
+                                        <TextBox Text="{Binding OpeningRec1Width_2}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="OpeningRec1Width_2" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="剃边矩形高" />
+                                        <TextBox Text="{Binding OpeningRec1Height_2}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="OpeningRec1Height_2" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="判定间隙" />
+                                        <TextBox Text="{Binding GapMax_2}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="GapMax_2" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
                                 </StackPanel>
-                                <StackPanel Style="{StaticResource stackPanelCell}">
-                                    <TextBlock Text="塑壳阈值max" />
-                                    <TextBox Text="{Binding ThresholdMax_2}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="ThresholdMax_2" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
-                                </StackPanel>
-                                <StackPanel Style="{StaticResource stackPanelCell}">
-                                    <TextBlock Text="剃边矩形宽" />
-                                    <TextBox Text="{Binding OpeningRec1Width_2}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="OpeningRec1Width_2" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
-                                    <TextBlock Text="像素" />
-                                </StackPanel>
-                                <StackPanel Style="{StaticResource stackPanelCell}">
-                                    <TextBlock Text="剃边矩形高" />
-                                    <TextBox Text="{Binding OpeningRec1Height_2}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="OpeningRec1Height_2" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
-                                    <TextBlock Text="像素" />
-                                </StackPanel>
-                                <StackPanel Style="{StaticResource stackPanelCell}">
-                                    <TextBlock Text="判定间隙" />
-                                    <TextBox Text="{Binding GapMax_2}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="GapMax_2" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
-                                    <TextBlock Text="像素" />
+                                <StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="除杂宽度" />
+                                        <TextBox Text="{Binding MussyWidth_2}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="MussyWidth_2" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="除杂高度" />
+                                        <TextBox Text="{Binding MussyHeight_2}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="MussyHeight_2" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="形状面积" />
+                                        <TextBox Text="{Binding DiffShapeArea_2}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="DiffShapeArea_2" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
+                                    <StackPanel Style="{StaticResource stackPanelCell}">
+                                        <TextBlock Style="{StaticResource paramName}" Text="形状高度" />
+                                        <TextBox Text="{Binding DiffShapeHeight_2}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="LostFocus">
+                                                    <i:InvokeCommandAction Command="{Binding TextBoxLostFocusEventCommand}" CommandParameter="DiffShapeHeight_2" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                        <TextBlock Style="{StaticResource paramUnit}" Text="像素" />
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
+
                         </GroupBox>
                     </StackPanel>
 

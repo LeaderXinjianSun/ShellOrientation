@@ -29,7 +29,7 @@ namespace ShellOrientation.ViewModels.Home
         Param param;
         bool plcConnect = false;
         HTuple RotateDeg, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, thresholdMin_2, thresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2,
-    GapMax_2, IsExcludeRobotMove;
+    GapMax_2, IsExcludeRobotMove, MussyWidth, MussyHeight, diffShapeArea, diffShapeHeight, MussyWidth_2, MussyHeight_2, diffShapeArea_2, diffShapeHeight_2;
         HObject iamgeSTX, executeRec1;
         HObject rec1_0, rec1_1;
         #endregion
@@ -206,7 +206,7 @@ namespace ShellOrientation.ViewModels.Home
                     }
 
                     HTuple hv_result; HObject hv_resultRegion1;
-                    ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_0, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, out hv_resultRegion1, out hv_result);
+                    ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_0, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, MussyWidth, MussyHeight, diffShapeArea, diffShapeHeight, out hv_resultRegion1, out hv_result);
                     System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
                     {                        
                         if (hv_result == 1)
@@ -225,7 +225,7 @@ namespace ShellOrientation.ViewModels.Home
                         plc.WriteMCoil(800,!(hv_result == 1));
 
                     HObject hv_resultRegion2;
-                    ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_1, thresholdMin_2, thresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, out hv_resultRegion2, out hv_result);
+                    ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_1, thresholdMin_2, thresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, MussyWidth_2, MussyHeight_2, diffShapeArea_2, diffShapeHeight_2, out hv_resultRegion2, out hv_result);
 
                     System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
                     {
@@ -269,6 +269,14 @@ namespace ShellOrientation.ViewModels.Home
                 HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "OpeningRec1Height_2.tup"), out OpeningRec1Height_2);
                 HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"), out GapMax_2);
                 HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "IsExcludeRobotMove.tup"), out IsExcludeRobotMove);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyWidth.tup"), out MussyWidth);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyHeight.tup"), out MussyHeight);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "diffShapeArea.tup"), out diffShapeArea);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "diffShapeHeight.tup"), out diffShapeHeight);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyWidth_2.tup"), out MussyWidth_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyHeight_2.tup"), out MussyHeight_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "diffShapeArea_2.tup"), out diffShapeArea_2);
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "diffShapeHeight_2.tup"), out diffShapeHeight_2);
                 HOperatorSet.ReadImage(out iamgeSTX, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"executeRec1.jpg"));
                 HOperatorSet.ReadRegion(out executeRec1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.hobj"));
                 HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));

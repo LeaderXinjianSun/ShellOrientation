@@ -134,6 +134,54 @@ namespace ShellOrientation.ViewModels.Dialog
             get { return isExcludeRobotMove; }
             set { SetProperty(ref isExcludeRobotMove, value); }
         }
+        private double mussyWidth;
+        public double MussyWidth
+        {
+            get { return mussyWidth; }
+            set { SetProperty(ref mussyWidth, value); }
+        }
+        private double mussyHeight;
+        public double MussyHeight
+        {
+            get { return mussyHeight; }
+            set { SetProperty(ref mussyHeight, value); }
+        }
+        private int diffShapeArea;
+        public int DiffShapeArea
+        {
+            get { return diffShapeArea; }
+            set { SetProperty(ref diffShapeArea, value); }
+        }
+        private int diffShapeHeight;
+        public int DiffShapeHeight
+        {
+            get { return diffShapeHeight; }
+            set { SetProperty(ref diffShapeHeight, value); }
+        }
+        private double mussyWidth_2;
+        public double MussyWidth_2
+        {
+            get { return mussyWidth_2; }
+            set { SetProperty(ref mussyWidth_2, value); }
+        }
+        private double mussyHeight_2;
+        public double MussyHeight_2
+        {
+            get { return mussyHeight_2; }
+            set { SetProperty(ref mussyHeight_2, value); }
+        }
+        private int diffShapeArea_2;
+        public int DiffShapeArea_2
+        {
+            get { return diffShapeArea_2; }
+            set { SetProperty(ref diffShapeArea_2, value); }
+        }
+        private int diffShapeHeight_2;
+        public int DiffShapeHeight_2
+        {
+            get { return diffShapeHeight_2; }
+            set { SetProperty(ref diffShapeHeight_2, value); }
+        }
         #endregion
         #region 方法绑定
         private DelegateCommand<object> cameraOperateCommand;
@@ -243,6 +291,30 @@ namespace ShellOrientation.ViewModels.Dialog
                     case "GapMax_2":
                         HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"));
                         break;
+                    case "MussyWidth":
+                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyWidth.tup"));
+                        break;
+                    case "MussyHeight":
+                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyHeight.tup"));
+                        break;
+                    case "DiffShapeArea":
+                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeArea.tup"));
+                        break;
+                    case "DiffShapeHeight":
+                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeHeight.tup"));
+                        break;
+                    case "MussyWidth_2":
+                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyWidth_2.tup"));
+                        break;
+                    case "MussyHeight_2":
+                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyHeight_2.tup"));
+                        break;
+                    case "DiffShapeArea_2":
+                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeArea_2.tup"));
+                        break;
+                    case "DiffShapeHeight_2":
+                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeHeight_2.tup"));
+                        break;
                     default:
                         break;
                 }
@@ -285,7 +357,7 @@ namespace ShellOrientation.ViewModels.Dialog
                 HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
                 HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
                 HTuple hv_result; HObject hv_resultRegion1;
-                ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0, ThresholdMin, ThresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, out hv_resultRegion1, out hv_result);
+                ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0, ThresholdMin, ThresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, MussyWidth, MussyHeight, DiffShapeArea, DiffShapeHeight, out hv_resultRegion1, out hv_result);
 
                 CameraAppendHMessage0 = null;
                 if (hv_result == 1)
@@ -302,7 +374,7 @@ namespace ShellOrientation.ViewModels.Dialog
                 CameraAppendHObject0 = hv_resultRegion1;
 
                 HObject hv_resultRegion2;
-                ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_1, ThresholdMin_2, ThresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, out hv_resultRegion2, out hv_result);
+                ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_1, ThresholdMin_2, ThresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, MussyWidth_2, MussyHeight_2, DiffShapeArea_2, DiffShapeHeight_2, out hv_resultRegion2, out hv_result);
 
                 if (hv_result == 1)
                 {
@@ -439,6 +511,24 @@ namespace ShellOrientation.ViewModels.Dialog
 
                 HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "IsExcludeRobotMove.tup"), out v1);
                 IsExcludeRobotMove = v1.I == 1;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyWidth.tup"), out v1);
+                MussyWidth = v1.D;
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyHeight.tup"), out v1);
+                MussyHeight = v1.D;
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeArea.tup"), out v1);
+                DiffShapeArea = v1.I;
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeHeight.tup"), out v1);
+                DiffShapeHeight = v1.I;
+
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyWidth_2.tup"), out v1);
+                MussyWidth_2 = v1.D;
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyHeight_2.tup"), out v1);
+                MussyHeight_2 = v1.D;
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeArea_2.tup"), out v1);
+                DiffShapeArea_2 = v1.I;
+                HOperatorSet.ReadTuple(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeHeight_2.tup"), out v1);
+                DiffShapeHeight_2 = v1.I;
             }
             catch { }
         }

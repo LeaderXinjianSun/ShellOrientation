@@ -97,7 +97,7 @@ namespace ShellOrientation.Models
 
             return;
         }
-        public static void CalcOpeningRec1(HObject ho_image, HObject ho_Rectangle, HTuple ThresholdMin, HTuple ThresholdMax, HTuple OpeningRec1Width, HTuple OpeningRec1Height, HTuple GapMax,
+        public static void CalcOpeningRec1(HObject ho_image, HObject ho_Rectangle, HTuple ThresholdMin, HTuple ThresholdMax, HTuple OpeningRec1Width, HTuple OpeningRec1Height, HTuple GapMax, HTuple MussyWidth, HTuple MussyHeight, HTuple diffShapeArea, HTuple diffShapeHeight,
             out HObject ho_SelectedRegions, out HTuple hv_isOK)
         {
             // Local iconic variables 
@@ -128,7 +128,7 @@ namespace ShellOrientation.Models
             HOperatorSet.Threshold(ho_GrayImage, out ho_Region, ThresholdMin, ThresholdMax);
 
             ho_RegionOpening0.Dispose();
-            HOperatorSet.OpeningRectangle1(ho_Region, out ho_RegionOpening0, OpeningRec1Width, 20);//把毛刺先滤除一遍。轨道发白
+            HOperatorSet.OpeningRectangle1(ho_Region, out ho_RegionOpening0, MussyWidth, MussyHeight);//把毛刺先滤除一遍。轨道发白
 
             ho_RegionFillUp.Dispose();
             HOperatorSet.FillUp(ho_RegionOpening0, out ho_RegionFillUp);
@@ -143,7 +143,7 @@ namespace ShellOrientation.Models
             HOperatorSet.Connection(ho_RegionDifference, out ho_ConnectedRegions);
 
             ho_SelectedRegions.Dispose();
-            HOperatorSet.SelectShape(ho_ConnectedRegions, out ho_SelectedRegions, new HTuple("area").TupleConcat("height"), "and", new HTuple(200).TupleConcat(50), new HTuple(999999).TupleConcat(999999));//把细小的干扰滤除掉。太窄的也去掉
+            HOperatorSet.SelectShape(ho_ConnectedRegions, out ho_SelectedRegions, new HTuple("area").TupleConcat("height"), "and", new HTuple(diffShapeArea).TupleConcat(diffShapeHeight), new HTuple(999999).TupleConcat(999999));//把细小的干扰滤除掉。太窄的也去掉
 
             HOperatorSet.RegionFeatures(ho_SelectedRegions, "width", out hv_widths);
 
