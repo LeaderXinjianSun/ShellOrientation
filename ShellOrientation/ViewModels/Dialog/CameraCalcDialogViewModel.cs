@@ -292,28 +292,28 @@ namespace ShellOrientation.ViewModels.Dialog
                         HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "GapMax_2.tup"));
                         break;
                     case "MussyWidth":
-                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyWidth.tup"));
+                        HOperatorSet.WriteTuple(new HTuple(MussyWidth), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyWidth.tup"));
                         break;
                     case "MussyHeight":
-                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyHeight.tup"));
+                        HOperatorSet.WriteTuple(new HTuple(MussyHeight), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyHeight.tup"));
                         break;
                     case "DiffShapeArea":
-                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeArea.tup"));
+                        HOperatorSet.WriteTuple(new HTuple(DiffShapeArea), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeArea.tup"));
                         break;
                     case "DiffShapeHeight":
-                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeHeight.tup"));
+                        HOperatorSet.WriteTuple(new HTuple(DiffShapeHeight), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeHeight.tup"));
                         break;
                     case "MussyWidth_2":
-                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyWidth_2.tup"));
+                        HOperatorSet.WriteTuple(new HTuple(MussyWidth_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyWidth_2.tup"));
                         break;
                     case "MussyHeight_2":
-                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyHeight_2.tup"));
+                        HOperatorSet.WriteTuple(new HTuple(MussyHeight_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "MussyHeight_2.tup"));
                         break;
                     case "DiffShapeArea_2":
-                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeArea_2.tup"));
+                        HOperatorSet.WriteTuple(new HTuple(DiffShapeArea_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeArea_2.tup"));
                         break;
                     case "DiffShapeHeight_2":
-                        HOperatorSet.WriteTuple(new HTuple(GapMax_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeHeight_2.tup"));
+                        HOperatorSet.WriteTuple(new HTuple(DiffShapeHeight_2), System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "DiffShapeHeight_2.tup"));
                         break;
                     default:
                         break;
@@ -390,6 +390,8 @@ namespace ShellOrientation.ViewModels.Dialog
             }
             catch (Exception ex)
             {
+                CameraAppendHMessage0 = new HMsgEntry("计算出错。", 40, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
                 Console.WriteLine(ex.Message);
             }
         }
