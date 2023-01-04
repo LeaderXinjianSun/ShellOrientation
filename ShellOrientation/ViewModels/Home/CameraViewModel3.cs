@@ -86,9 +86,7 @@ GapMax_2, IsExcludeRobotMove, MussyWidth, MussyHeight, diffShapeArea, diffShapeH
             //M800-M803
             if (r)
             {
-                cam.GrabeImageStart();
                 aggregator.SendMessage("Camera3OpenOK", "Camera");
-                CameraIamge0 = cam.GrabeImageAsync();
                 LoadCameraParm();
                 source = new CancellationTokenSource();
                 CancellationToken token1 = source.Token;
@@ -161,7 +159,7 @@ GapMax_2, IsExcludeRobotMove, MussyWidth, MussyHeight, diffShapeArea, diffShapeH
                     if (m806[0])
                     {
                         plc.WriteMCoil(806, false);
-                        var img = cam.GrabeImageAsync();
+                        var img = cam.GrabImage();
                         if (img == null)
                         {
                             aggregator.SendMessage("Camera3OpenNG", "Camera");

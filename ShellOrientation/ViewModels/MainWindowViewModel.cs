@@ -1,5 +1,6 @@
 ﻿
 
+using HalconDotNet;
 using Newtonsoft.Json;
 using NLog;
 using Prism.Commands;
@@ -236,6 +237,10 @@ namespace ShellOrientation.ViewModels
             cam4 = containerProvider.Resolve<ICameraService>("Cam4");
             plc1 = containerProvider.Resolve<IPLCModbusService>("plc1");
             plc2 = containerProvider.Resolve<IPLCModbusService>("plc2");
+
+            HOperatorSet.ResetObjDb(5000, 5000, 1);
+            HOperatorSet.SetSystem("clip_region", "false");
+            HOperatorSet.SetSystem("store_empty_region", "true");
             LoadParam();
 
             NlogConfig();

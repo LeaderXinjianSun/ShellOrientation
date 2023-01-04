@@ -419,7 +419,7 @@ namespace ShellOrientation.ViewModels.Dialog
                     try
                     {
                         HObject ho_ImageRotate;
-                        var img = cam.GrabeImageAsync();
+                        var img = cam.GrabImage();
                         if (img != null)
                         {
                             HOperatorSet.RotateImage(img, out ho_ImageRotate, RotateDeg, "constant");

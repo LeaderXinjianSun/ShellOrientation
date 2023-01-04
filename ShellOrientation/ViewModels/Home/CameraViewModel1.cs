@@ -86,9 +86,7 @@ namespace ShellOrientation.ViewModels.Home
             //M800-M803
             if (r)
             {
-                cam.GrabeImageStart();
                 aggregator.SendMessage("Camera1OpenOK", "Camera");
-                CameraIamge0 = cam.GrabeImageAsync();
                 LoadCameraParm();
                 source = new CancellationTokenSource();
                 CancellationToken token1 = source.Token;
@@ -161,7 +159,7 @@ namespace ShellOrientation.ViewModels.Home
                     if (m804[0])
                     {
                         plc.WriteMCoil(804, false);
-                        var img = cam.GrabeImageAsync();
+                        var img = cam.GrabImage();
                         if (img == null)
                         {
                             aggregator.SendMessage("Camera1OpenNG", "Camera");

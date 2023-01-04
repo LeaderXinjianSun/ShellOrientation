@@ -90,10 +90,8 @@ GapMax_2, IsExcludeRobotMove, MussyWidth, MussyHeight, diffShapeArea, diffShapeH
             var r = cam.OpenCamera(param.Camera2Name, "DirectShow");//[0] Integrated Camera //[1] LRCP  USB2.0
             //M800-M803
             if (r)
-            {
-                cam.GrabeImageStart();               
+            {          
                 aggregator.SendMessage("Camera2OpenOK", "Camera");
-                CameraIamge0 = cam.GrabeImageAsync();
                 LoadCameraParm();
                 source = new CancellationTokenSource();
                 CancellationToken token1 = source.Token;
@@ -181,7 +179,7 @@ GapMax_2, IsExcludeRobotMove, MussyWidth, MussyHeight, diffShapeArea, diffShapeH
                     if (m805[0])
                     {
                         plc.WriteMCoil(805, false);
-                        var img = cam.GrabeImageAsync();
+                        var img = cam.GrabImage();
                         if (img == null)
                         {
                             aggregator.SendMessage("Camera2OpenNG", "Camera");
