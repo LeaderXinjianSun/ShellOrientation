@@ -155,10 +155,10 @@ namespace ShellOrientation.ViewModels.Home
                 }
                 try
                 {
-                    var m804 = plc.ReadMCoils(804, 1);
-                    if (m804[0])
+                    var m806 = plc.ReadMCoils(806, 1);
+                    if (m806[0])
                     {
-                        plc.WriteMCoil(804, false);
+                        plc.WriteMCoil(806, false);
                         var img = cam.GrabImage();
                         if (img == null)
                         {

@@ -155,10 +155,10 @@ GapMax_2, IsExcludeRobotMove, MussyWidth, MussyHeight, diffShapeArea, diffShapeH
                 }
                 try
                 {
-                    var m807 = plc.ReadMCoils(807, 1);
-                    if (m807[0])
+                    var m809 = plc.ReadMCoils(809, 1);
+                    if (m809[0])
                     {
-                        plc.WriteMCoil(807, false);
+                        plc.WriteMCoil(809, false);
                         var img = cam.GrabImage();
                         if (img == null)
                         {
