@@ -205,36 +205,48 @@ namespace ShellOrientation.ViewModels.Dialog
 
         void ExecuteCreateExcludeRobotMoveCommand()
         {
-            string filepath = $"Camera\\{index + 1}";
-            try
+            if (CameraIamge0 != null)
             {
-                ROI roi = Global.CameraImageViewer.DrawROI(ROI.ROI_TYPE_RECTANGLE1);
-                var executeRec1 = roi.getRegion();
-                CameraGCStyle0 = new Tuple<string, object>("Color", "cyan");
-                CameraAppendHObject0 = null;
-                CameraAppendHObject0 = executeRec1;
-                HTuple executeRec1Row1;
-                HOperatorSet.RegionFeatures(executeRec1, "row1", out executeRec1Row1);
-                HTuple executeRec1Column1;
-                HOperatorSet.RegionFeatures(executeRec1, "column1", out executeRec1Column1);
-                HTuple executeRec1Width;
-                HOperatorSet.RegionFeatures(executeRec1, "width", out executeRec1Width);
-                HTuple executeRec1Height;
-                HOperatorSet.RegionFeatures(executeRec1, "height", out executeRec1Height);
-                HObject imagePart;
-                HOperatorSet.CropPart(CameraIamge0, out imagePart, executeRec1Row1, executeRec1Column1, executeRec1Width, executeRec1Height);
-                DirectoryInfo dir = new DirectoryInfo(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
-                if (!dir.Exists)
+                if (MessageBox.Show($"你确定画相机{index + 1}的排除区域吗？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
                 {
-                    Directory.CreateDirectory(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
+                    string filepath = $"Camera\\{index + 1}";
+                    try
+                    {
+                        ROI roi = Global.CameraImageViewer.DrawROI(ROI.ROI_TYPE_RECTANGLE1);
+                        var executeRec1 = roi.getRegion();
+                        CameraGCStyle0 = new Tuple<string, object>("Color", "cyan");
+                        CameraAppendHObject0 = null;
+                        CameraAppendHObject0 = executeRec1;
+                        HTuple executeRec1Row1;
+                        HOperatorSet.RegionFeatures(executeRec1, "row1", out executeRec1Row1);
+                        HTuple executeRec1Column1;
+                        HOperatorSet.RegionFeatures(executeRec1, "column1", out executeRec1Column1);
+                        HTuple executeRec1Width;
+                        HOperatorSet.RegionFeatures(executeRec1, "width", out executeRec1Width);
+                        HTuple executeRec1Height;
+                        HOperatorSet.RegionFeatures(executeRec1, "height", out executeRec1Height);
+                        HObject imagePart;
+                        HOperatorSet.CropPart(CameraIamge0, out imagePart, executeRec1Row1, executeRec1Column1, executeRec1Width, executeRec1Height);
+                        DirectoryInfo dir = new DirectoryInfo(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
+                        if (!dir.Exists)
+                        {
+                            Directory.CreateDirectory(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
+                        }
+                        HOperatorSet.WriteRegion(executeRec1, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "executeRec1.hobj"));
+                        HOperatorSet.WriteImage(imagePart, "jpeg", 0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.jpg"));
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
                 }
-                HOperatorSet.WriteRegion(executeRec1, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, "executeRec1.hobj"));
-                HOperatorSet.WriteImage(imagePart, "jpeg", 0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.jpg"));
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine(ex.Message);
+                MessageBox.Show("图像为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+
+            
 
         }
         void ExecuteCheckBoxCommand()
@@ -327,88 +339,106 @@ namespace ShellOrientation.ViewModels.Dialog
         }
         void ExecuteCalcCommand()
         {
-            string filepath = $"Camera\\{index + 1}";
-            try
+            if (CameraIamge0 != null)
             {
-                if (IsExcludeRobotMove)
+                string filepath = $"Camera\\{index + 1}";
+                try
                 {
-                    HObject iamgeSTX;
-                    HOperatorSet.ReadImage(out iamgeSTX, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"executeRec1.jpg"));
-                    HObject executeRec1;
-                    HOperatorSet.ReadRegion(out executeRec1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.hobj"));
-                    HObject ho_resultRegion;
-                    HTuple hv_result0;
-                    ImageCalc.SubImage(CameraIamge0, iamgeSTX, executeRec1, out ho_resultRegion, out hv_result0);
-
-                    if (hv_result0.I == 0)
+                    if (IsExcludeRobotMove)
                     {
-                        CameraGCStyle0 = new Tuple<string, object>("DrawMode", "fill");
-                        CameraGCStyle0 = new Tuple<string, object>("Color", "orange red");
-                        CameraAppendHObject0 = null;
-                        CameraAppendHObject0 = ho_resultRegion;
-                        CameraAppendHMessage0 = null;
-                        CameraAppendHMessage0 = new HMsgEntry("画面有干扰，不做计算。", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
-                        return;
+                        HObject iamgeSTX;
+                        HOperatorSet.ReadImage(out iamgeSTX, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, $"executeRec1.jpg"));
+                        HObject executeRec1;
+                        HOperatorSet.ReadRegion(out executeRec1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "executeRec1.hobj"));
+                        HObject ho_resultRegion;
+                        HTuple hv_result0;
+                        ImageCalc.SubImage(CameraIamge0, iamgeSTX, executeRec1, out ho_resultRegion, out hv_result0);
+
+                        if (hv_result0.I == 0)
+                        {
+                            CameraGCStyle0 = new Tuple<string, object>("DrawMode", "fill");
+                            CameraGCStyle0 = new Tuple<string, object>("Color", "orange red");
+                            CameraAppendHObject0 = null;
+                            CameraAppendHObject0 = ho_resultRegion;
+                            CameraAppendHMessage0 = null;
+                            CameraAppendHMessage0 = new HMsgEntry("画面有干扰，不做计算。", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                            return;
+                        }
+                        iamgeSTX.Dispose();
+                        executeRec1.Dispose();
                     }
-                    iamgeSTX.Dispose();
-                    executeRec1.Dispose();
-                }
-                HObject rec1_0, rec1_1;
-                HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
-                HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
-                HTuple hv_result; HObject hv_resultRegion1;
-                ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0, ThresholdMin, ThresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, MussyWidth, MussyHeight, DiffShapeArea, DiffShapeHeight, out hv_resultRegion1, out hv_result);
+                    HObject rec1_0, rec1_1;
+                    HOperatorSet.ReadRegion(out rec1_0, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_0.hobj"));
+                    HOperatorSet.ReadRegion(out rec1_1, System.IO.Path.Combine(System.Environment.CurrentDirectory, filepath, "rec1_1.hobj"));
+                    HTuple hv_result; HObject hv_resultRegion1;
+                    ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_0, ThresholdMin, ThresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, MussyWidth, MussyHeight, DiffShapeArea, DiffShapeHeight, out hv_resultRegion1, out hv_result);
 
-                CameraAppendHMessage0 = null;
-                if (hv_result == 1)
-                {
-                    CameraAppendHMessage0 = new HMsgEntry("1:OK", 10, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
-                    CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                    CameraAppendHMessage0 = null;
+                    if (hv_result == 1)
+                    {
+                        CameraAppendHMessage0 = new HMsgEntry("1:OK", 10, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
+                        CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                    }
+                    else
+                    {
+                        CameraAppendHMessage0 = new HMsgEntry("1:NG", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                        CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                    }
+                    CameraAppendHObject0 = null;
+                    CameraAppendHObject0 = hv_resultRegion1;
+
+                    HObject hv_resultRegion2;
+                    ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_1, ThresholdMin_2, ThresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, MussyWidth_2, MussyHeight_2, DiffShapeArea_2, DiffShapeHeight_2, out hv_resultRegion2, out hv_result);
+
+                    if (hv_result == 1)
+                    {
+                        CameraAppendHMessage0 = new HMsgEntry("2:OK", 40, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
+                        CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                    }
+                    else
+                    {
+                        CameraAppendHMessage0 = new HMsgEntry("2:NG", 40, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                        CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                    }
+                    CameraAppendHObject0 = hv_resultRegion2;
                 }
-                else
+                catch (Exception ex)
                 {
-                    CameraAppendHMessage0 = new HMsgEntry("1:NG", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                    CameraAppendHMessage0 = new HMsgEntry("计算出错。", 40, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
                     CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                    Console.WriteLine(ex.Message);
                 }
-                CameraAppendHObject0 = null;
-                CameraAppendHObject0 = hv_resultRegion1;
-
-                HObject hv_resultRegion2;
-                ImageCalc.CalcOpeningRec1(CameraIamge0, rec1_1, ThresholdMin_2, ThresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, MussyWidth_2, MussyHeight_2, DiffShapeArea_2, DiffShapeHeight_2, out hv_resultRegion2, out hv_result);
-
-                if (hv_result == 1)
-                {
-                    CameraAppendHMessage0 = new HMsgEntry("2:OK", 40, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
-                    CameraGCStyle0 = new Tuple<string, object>("Color", "green");
-                }
-                else
-                {
-                    CameraAppendHMessage0 = new HMsgEntry("2:NG", 40, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
-                    CameraGCStyle0 = new Tuple<string, object>("Color", "red");
-                }
-                CameraAppendHObject0 = hv_resultRegion2;
             }
-            catch (Exception ex)
+            else
             {
-                CameraAppendHMessage0 = new HMsgEntry("计算出错。", 40, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
-                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
-                Console.WriteLine(ex.Message);
+                MessageBox.Show("图像为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
         void ExecuteCreateLineCommand(object obj)
         {
-            string filepath = $"Camera\\{index + 1}";
-            ROI roi = Global.CameraImageViewer.DrawROI(ROI.ROI_TYPE_RECTANGLE1);
-            var line = roi.getRegion();
-            CameraGCStyle0 = new Tuple<string, object>("Color", "violet");
-            CameraAppendHObject0 = null;
-            CameraAppendHObject0 = line;
-            DirectoryInfo dir = new DirectoryInfo(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
-            if (!dir.Exists)
+            if (CameraIamge0 != null)
             {
-                Directory.CreateDirectory(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
+                string dirstr = obj.ToString() == "0" ? "轨道1" : "轨道2";
+                if (MessageBox.Show($"你确定画相机{index + 1}的{dirstr}区域吗？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    string filepath = $"Camera\\{index + 1}";
+                    ROI roi = Global.CameraImageViewer.DrawROI(ROI.ROI_TYPE_RECTANGLE1);
+                    var line = roi.getRegion();
+                    CameraGCStyle0 = new Tuple<string, object>("Color", "violet");
+                    CameraAppendHObject0 = null;
+                    CameraAppendHObject0 = line;
+                    DirectoryInfo dir = new DirectoryInfo(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
+                    if (!dir.Exists)
+                    {
+                        Directory.CreateDirectory(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath));
+                    }
+                    HOperatorSet.WriteRegion(line, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, $"rec1_{obj}.hobj"));
+                }
             }
-            HOperatorSet.WriteRegion(line, System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, filepath, $"rec1_{obj}.hobj"));
+            else
+            {
+                MessageBox.Show("图像为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
         void ExecuteCameraOperateCommand(object obj)
         {
