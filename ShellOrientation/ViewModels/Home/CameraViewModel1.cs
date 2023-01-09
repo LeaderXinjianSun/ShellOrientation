@@ -155,99 +155,104 @@ namespace ShellOrientation.ViewModels.Home
                 }
                 try
                 {
-                    var m806 = plc.ReadMCoils(806, 1);
-                    if (m806[0])
+                    var m806 = plc.ReadMCoils(806, 2);
+                    if (m806 != null)
                     {
-                        plc.WriteMCoil(806, false);
-                        var img = cam.GrabImage();
-                        if (img == null)
+                        if (m806[0] || m806[1])
                         {
-                            aggregator.SendMessage("Camera1OpenNG", "Camera");
-                            cam.CloseCamera();
-                            Thread.Sleep(1000);
-                            var r = cam.OpenCamera(param.Camera1Name, "DirectShow");
-                            if (r)
+                            plc.WriteMCoil(806, false);
+                            plc.WriteMCoil(807, false);
+                            var img = cam.GrabImage();
+                            if (img == null)
                             {
-                                cam.GrabeImageStart();
-                                aggregator.SendMessage("Camera1OpenOK", "Camera");
-                                logger.Info("①相机重连:成功");
-                            }
-                            else
-                            {
-                                logger.Info("①相机重连:失败");
-                            }
-                            continue;
-                        }
-                        HObject ho_ImageRotate;
-                        HOperatorSet.RotateImage(img, out ho_ImageRotate, RotateDeg, "constant");
-                        CameraIamge0 = new HImage(ho_ImageRotate);
-
-                        if (IsExcludeRobotMove.I == 1)
-                        {
-                            HObject ho_resultRegion;
-                            HTuple hv_result0;
-                            ImageCalc.SubImage(CameraIamge0, iamgeSTX, executeRec1, out ho_resultRegion, out hv_result0);
-
-                            if (hv_result0.I == 0)
-                            {
-                                System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+                                aggregator.SendMessage("Camera1OpenNG", "Camera");
+                                cam.CloseCamera();
+                                Thread.Sleep(1000);
+                                var r = cam.OpenCamera(param.Camera1Name, "DirectShow");
+                                if (r)
                                 {
-                                    CameraGCStyle0 = new Tuple<string, object>("DrawMode", "fill");
-                                    CameraGCStyle0 = new Tuple<string, object>("Color", "orange red");
-                                    CameraAppendHObject0 = null;
-                                    CameraAppendHObject0 = ho_resultRegion;
-                                    CameraAppendHMessage0 = null;
-                                    CameraAppendHMessage0 = new HMsgEntry("画面有干扰，不做计算。", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
-                                }));
-                                if (plcConnect)
-                                {
-                                    plc.WriteMCoil(800, false);
-                                    plc.WriteMCoil(801, false);
+                                    cam.GrabeImageStart();
+                                    aggregator.SendMessage("Camera1OpenOK", "Camera");
+                                    logger.Info("①相机重连:成功");
                                 }
-                                Thread.Sleep(100);
+                                else
+                                {
+                                    logger.Info("①相机重连:失败");
+                                }
                                 continue;
                             }
+                            HObject ho_ImageRotate;
+                            HOperatorSet.RotateImage(img, out ho_ImageRotate, RotateDeg, "constant");
+                            CameraIamge0 = new HImage(ho_ImageRotate);
+
+                            if (IsExcludeRobotMove.I == 1)
+                            {
+                                HObject ho_resultRegion;
+                                HTuple hv_result0;
+                                ImageCalc.SubImage(CameraIamge0, iamgeSTX, executeRec1, out ho_resultRegion, out hv_result0);
+
+                                if (hv_result0.I == 0)
+                                {
+                                    System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+                                    {
+                                        CameraGCStyle0 = new Tuple<string, object>("DrawMode", "fill");
+                                        CameraGCStyle0 = new Tuple<string, object>("Color", "orange red");
+                                        CameraAppendHObject0 = null;
+                                        CameraAppendHObject0 = ho_resultRegion;
+                                        CameraAppendHMessage0 = null;
+                                        CameraAppendHMessage0 = new HMsgEntry("画面有干扰，不做计算。", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                                    }));
+                                    if (plcConnect)
+                                    {
+                                        plc.WriteMCoil(800, false);
+                                        plc.WriteMCoil(801, false);
+                                    }
+                                    Thread.Sleep(100);
+                                    continue;
+                                }
+                            }
+
+                            HTuple hv_result; HObject hv_resultRegion1;
+                            ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_0, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, MussyWidth, MussyHeight, diffShapeArea, diffShapeHeight, out hv_resultRegion1, out hv_result);
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                if (hv_result == 1)
+                                {
+                                    CameraAppendHMessage0 = new HMsgEntry("1:OK", 10, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
+                                    CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                                }
+                                else
+                                {
+                                    CameraAppendHMessage0 = new HMsgEntry("1:NG", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                                    CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                                }
+                                CameraAppendHObject0 = hv_resultRegion1;
+                            }));
+                            if (plcConnect)
+                                plc.WriteMCoil(800, !(hv_result == 1));
+
+                            HObject hv_resultRegion2;
+                            ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_1, thresholdMin_2, thresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, MussyWidth_2, MussyHeight_2, diffShapeArea_2, diffShapeHeight_2, out hv_resultRegion2, out hv_result);
+
+                            System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
+                            {
+                                if (hv_result == 1)
+                                {
+                                    CameraAppendHMessage0 = new HMsgEntry("2:OK", 40, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
+                                    CameraGCStyle0 = new Tuple<string, object>("Color", "green");
+                                }
+                                else
+                                {
+                                    CameraAppendHMessage0 = new HMsgEntry("2:NG", 40, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
+                                    CameraGCStyle0 = new Tuple<string, object>("Color", "red");
+                                }
+                                CameraAppendHObject0 = hv_resultRegion2;
+                            }));
+                            if (plcConnect)
+                                plc.WriteMCoil(801, !(hv_result == 1));
                         }
-
-                        HTuple hv_result; HObject hv_resultRegion1;
-                        ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_0, thresholdMin, thresholdMax, OpeningRec1Width, OpeningRec1Height, GapMax, MussyWidth, MussyHeight, diffShapeArea, diffShapeHeight, out hv_resultRegion1, out hv_result);
-                        System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
-                        {
-                            if (hv_result == 1)
-                            {
-                                CameraAppendHMessage0 = new HMsgEntry("1:OK", 10, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
-                                CameraGCStyle0 = new Tuple<string, object>("Color", "green");
-                            }
-                            else
-                            {
-                                CameraAppendHMessage0 = new HMsgEntry("1:NG", 10, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
-                                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
-                            }
-                            CameraAppendHObject0 = hv_resultRegion1;
-                        }));
-                        if (plcConnect)
-                            plc.WriteMCoil(800, !(hv_result == 1));
-
-                        HObject hv_resultRegion2;
-                        ImageCalc.CalcOpeningRec1(ho_ImageRotate, rec1_1, thresholdMin_2, thresholdMax_2, OpeningRec1Width_2, OpeningRec1Height_2, GapMax_2, MussyWidth_2, MussyHeight_2, diffShapeArea_2, diffShapeHeight_2, out hv_resultRegion2, out hv_result);
-
-                        System.Windows.Application.Current.Dispatcher.Invoke(new Action(() =>
-                        {
-                            if (hv_result == 1)
-                            {
-                                CameraAppendHMessage0 = new HMsgEntry("2:OK", 40, 10, "green", "window", "box", "false", 32, "mono", "true", "false");
-                                CameraGCStyle0 = new Tuple<string, object>("Color", "green");
-                            }
-                            else
-                            {
-                                CameraAppendHMessage0 = new HMsgEntry("2:NG", 40, 10, "red", "window", "box", "false", 32, "mono", "true", "false");
-                                CameraGCStyle0 = new Tuple<string, object>("Color", "red");
-                            }
-                            CameraAppendHObject0 = hv_resultRegion2;
-                        }));
-                        if (plcConnect)
-                            plc.WriteMCoil(801, !(hv_result == 1));
                     }
+                    
                 }
                 catch (Exception ex)
                 {
