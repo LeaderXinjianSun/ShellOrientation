@@ -33,7 +33,7 @@ namespace ShellOrientation.ViewModels
         #endregion
         #region 属性绑定
         public string Title { get; set; } = "ShellOrientationUI";
-        public string Version { get; set; } = "1.1.2";
+        public string Version { get; set; } = "1.1.3";
         private bool camera1State;
         public bool Camera1State
         {
